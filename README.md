@@ -1,9 +1,6 @@
 Livefyre Python Utility Classes
 ===============================
 
-Requirements
-============
-
 Works with Python versions: 2.6, 2.7, 3.2, 3.3
 
 Installation
