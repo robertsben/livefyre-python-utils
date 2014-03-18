@@ -1,0 +1,7 @@
+.project
+.pydevproject
+build
+dist
+livefyre.egg-info
+venv
+*.pyc
