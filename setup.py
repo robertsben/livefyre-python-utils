@@ -11,8 +11,10 @@ try:
 except ImportError:
     from distutils.command.build_py import build_py
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
-    long_description = readme.read()
+try:
+    readme = open('README.md').read()
+except IOError:
+    readme = ''
 
 install_requires = ['PyJWT == 0.1.9']
 
@@ -21,7 +23,7 @@ setup(
     cmdclass={'build_py': build_py},
     version='1.0.0',
     description='Livefyre Python utility classes',
-    long_description=long_description,
+    long_description=readme,
     license='MIT',
     keywords='livefyre',
     author='Livefyre',
@@ -32,7 +34,7 @@ setup(
     test_suite='livefyre.tests.all',
     use_2to3=True,
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
