@@ -1,5 +1,4 @@
-import os
-import sys
+from setuptools import find_packages
 
 try:
     from setuptools import setup
@@ -21,7 +20,7 @@ install_requires = ['PyJWT == 0.1.9']
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.0.0',
+    version='1.0.1',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
@@ -29,9 +28,9 @@ setup(
     author='Livefyre',
     author_email='tools@livefyre.com',
     url='http://livefyre.com/',
-    packages=['livefyre', 'livefyre.tests',],
+    packages=find_packages(),
     install_requires=install_requires,
-    test_suite='livefyre.tests.all',
+    test_suite='tests',
     use_2to3=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",

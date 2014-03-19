@@ -1,37 +1,14 @@
-import urllib, urllib2, jwt, time, base64, json
+import urllib, urllib2, jwt, time, base64, json, re
 
-        
-class Site(object):
-    def __init__(self, network_name, site_id, site_key):
-        self.network_name = network_name
-        self.site_id = site_id
-        self.site_key = site_key
-    
-    
-    def build_collection_token(self, title, article_id, url, tags, stream=''):
-        return jwt.encode({
-                'title': title,
-                'url': url,
-                'tags': tags,
-                'articleId': article_id,
-                'type': stream
-                },
-            self.site_key)
-    
-    
-    def get_collection_content(self, article_id):
-        url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init' \
-            .format(self.network_name, self.site_id, base64.b64encode(str(article_id)))
-        response = urllib2.urlopen(url=url)
-        
-        status = response.getcode()
-        if status == 200:
-            return json.load(response)
-        return ''
 
+class Livefyre(object):
+    @staticmethod
+    def get_network(network_name, network_key):
+        return Network(network_name, network_key)
+    
 
 class Network(object):
-    DEFAULT_USER = "system"
+    DEFAULT_USER = 'system'
     DEFAULT_EXPIRES = 86400
     
     def __init__(self, network_name, network_key):
@@ -40,8 +17,7 @@ class Network(object):
     
     
     def set_user_sync_url(self, url_template):
-        if not '{id}' in url_template:
-            return
+        assert '{id}' in url_template, 'url_template should have {id}.'
         token = self.build_user_auth_token()
         
         url = 'http://{0!s}/'.format(self.network_name)
@@ -61,6 +37,8 @@ class Network(object):
     def build_user_auth_token(self, user_id=None, display_name=None, expires=None):
         if user_id is None:
             user_id = self.DEFAULT_USER
+        else:
+            assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
         if display_name is None:
             display_name = self.DEFAULT_USER
         if expires is None:
@@ -82,3 +60,34 @@ class Network(object):
     
     def get_site(self, site_id, site_key):
         return Site(self.network_name, site_id, site_key)
+
+
+class Site(object):
+    def __init__(self, network_name, site_id, site_key):
+        self.network_name = network_name
+        self.site_id = site_id
+        self.site_key = site_key
+    
+    
+    def build_collection_meta_token(self, title, article_id, url, tags, stream=''):
+        assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
+        assert len(title) <= 255, "title's length should be under 255 char"
+        return jwt.encode({
+                'title': title,
+                'url': url,
+                'tags': tags,
+                'articleId': article_id,
+                'type': stream
+                },
+            self.site_key)
+    
+    
+    def get_collection_content(self, article_id):
+        url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init' \
+            .format(self.network_name, self.site_id, base64.b64encode(str(article_id)))
+        response = urllib2.urlopen(url=url)
+        
+        status = response.getcode()
+        if status == 200:
+            return json.load(response)
+        return ''
