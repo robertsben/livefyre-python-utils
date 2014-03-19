@@ -15,31 +15,35 @@ Creating tokens:
 
 **User auth token:**
 
-    Network('networkname', 'networkkey').build_user_auth_token('userid', 'displayname', 'timetillexpire')
+    network = Network(network_name, network_key)
+    network.build_user_auth_token(user_id, display_name, expires)
 
 **Collection meta token:**
 
-    network = Network('networkname', 'networkkey')
-    network.get_site('siteid', 'sitekey').build_collection_token('title', 'articleid', 'url', 'tags')
+    network = Network(network_name, network_key)
+    site = network.Site(site_id, site_key)
+    site.build_collection_token(title, article_id, url, tags)
 
 
 To validate a Livefyre token:
 
-    Network('networkname', 'networkkey').validate_livefyre_token('token')
+    network = Network(network_name, network_key)
+    network.validate_livefyre_token(token)
 
 
 To send Livefyre a user sync url and then have Livefyre pull user data from that url:
 
-    network = Network('networkname', 'networkkey')
+    network = Network(network_name, network_key)
     
-    network.set_user_sync_url('http://thisisa.test.url/{id}/')
-    network.sync_user('system')
+    network.set_user_sync_url('http://thisisa.test.url/{id}/'')
+    network.sync_user(system)
 
         
-To retrieve content collection data as a string and json object from Livefyre (note that both are in JSON, but the latter is encapsulated in a JsonObject):
+To retrieve content collection data as a tuple:
 
-    site = Network('networkname', 'networkkey').get_site('siteid', 'sitesecret')
-    content = site.get_collection_content(articleid)
+    network = Network(network_name, network_key)
+    site = network.get_site(site_id, site_secret)
+    site.get_collection_content(article_id)
 
 License
 =======
