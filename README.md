@@ -1,7 +1,7 @@
 Livefyre Python Utility Classes
 ===============================
 
-Livefyre's official library for common server-side tasks necessary for getting Livefyre apps (comments, reviews, etc.) working on your website
+Livefyre's official library for common server-side tasks necessary for getting Livefyre apps (comments, reviews, etc.) working on your website.
 
 Works with Python versions: 2.6, 2.7, 3.2, 3.3
 
@@ -23,6 +23,7 @@ Creating tokens:
 **Collection meta token:**
 
     network = Livefyre.get_network(network_name, network_key)
+
     site = network.get_site(site_id, site_key)
     site.build_collection_meta_token(title, article_id, url, tags)
 
@@ -44,6 +45,7 @@ To send Livefyre a user sync url and then have Livefyre pull user data from that
 To retrieve content collection data as a tuple:
 
     network = Livefyre.get_network(network_name, network_key)
+    
     site = network.get_site(site_id, site_key)
     site.get_collection_content(article_id)
 
