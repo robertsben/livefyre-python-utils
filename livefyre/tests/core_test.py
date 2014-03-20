@@ -1,6 +1,6 @@
 import unittest
 
-from ..src.core import Livefyre
+from livefyre import Livefyre
 
 class LivefyreTestCase(unittest.TestCase):
     NETWORK = 'test.fyre.com';

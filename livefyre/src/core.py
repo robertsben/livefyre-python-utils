@@ -1,12 +1,6 @@
 import urllib, urllib2, jwt, time, base64, json, re
 
 
-class Livefyre(object):
-    @staticmethod
-    def get_network(network_name, network_key):
-        return Network(network_name, network_key)
-    
-
 class Network(object):
     DEFAULT_USER = 'system'
     DEFAULT_EXPIRES = 86400
