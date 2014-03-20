@@ -30,7 +30,7 @@ setup(
     url='http://livefyre.com/',
     packages=find_packages(),
     install_requires=install_requires,
-    test_suite='tests',
+    test_suite='livefyre.tests',
     use_2to3=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
