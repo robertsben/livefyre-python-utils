@@ -1,4 +1,6 @@
-=== 1.0.1 2014-03-19
+=== 1.0.2 2014-03-19
+
+* Needed addn. changes to ensure that python3 is supported.
 
 * Reorganized modules. Added param checks. Added initial Livefyre.get_network static call.
 

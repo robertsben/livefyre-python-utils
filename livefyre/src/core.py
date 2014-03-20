@@ -1,5 +1,10 @@
-import urllib, urllib2, jwt, time, base64, json, re
+import base64, jwt, re, requests, sys, time
 
+try:
+    import simplejson as json
+except ImportError:
+    import json
+    
 
 class Network(object):
     DEFAULT_USER = 'system'
@@ -15,17 +20,20 @@ class Network(object):
         token = self.build_user_auth_token()
         
         url = 'http://{0!s}/'.format(self.network_name)
-        data = urllib.urlencode({'actor_token' : token,
-                                 'pull_profile_url'  : url_template})
-        status = urllib2.urlopen(url=url, data=data).getcode()
-        return status is 204
+        data = {'actor_token' : token, 'pull_profile_url' : url_template}
+        headers = {'Content-type': 'application/json'}
+        
+        request = requests.post(url=url, data=data, headers=headers)
+        return request.status_code is 204
         
         
     def sync_user(self, user_id):
         url = 'http://{0!s}/api/v3_0/user/{1!s}/refresh'.format(self.network_name, user_id)
-        data = urllib.urlencode({'lftoken' : self.build_user_auth_token()})
-        status = urllib2.urlopen(url=url, data=data).getcode()
-        return status is 200
+        data = {'lftoken' : self.build_user_auth_token()}
+        headers = {'Content-type': 'application/json'}
+        
+        request = requests.post(url=url, data=data, headers=headers)
+        return request.status_code is 200
     
     
     def build_user_auth_token(self, user_id=None, display_name=None, expires=None):
@@ -77,11 +85,15 @@ class Site(object):
     
     
     def get_collection_content(self, article_id):
-        url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init' \
-            .format(self.network_name, self.site_id, base64.b64encode(str(article_id)))
-        response = urllib2.urlopen(url=url)
+        if sys.version_info >= (3, 0):
+            article_bytes = bytes(str(article_id), 'utf-8')
+        else:
+            article_bytes = bytes(str(article_id))
+        encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')
+        url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init'.format(self.network_name, self.site_id, encoded_article_id)
         
-        status = response.getcode()
-        if status == 200:
-            return json.load(response)
+        response = requests.get(url=url)
+        import pdb; pdb.set_trace()
+        if response.status_code == 200:
+            return json.loads(response.content)
         return ''

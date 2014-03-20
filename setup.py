@@ -15,12 +15,12 @@ try:
 except IOError:
     readme = ''
 
-install_requires = ['PyJWT == 0.1.9']
+install_requires = ['PyJWT == 0.1.9', 'requests == 2.2.1']
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.0.1',
+    version='1.0.2',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
