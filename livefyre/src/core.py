@@ -93,7 +93,6 @@ class Site(object):
         url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init'.format(self.network_name, self.site_id, encoded_article_id)
         
         response = requests.get(url=url)
-        import pdb; pdb.set_trace()
         if response.status_code == 200:
             return json.loads(response.content)
         return ''
