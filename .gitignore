@@ -5,3 +5,5 @@ dist
 livefyre.egg-info
 venv
 *.pyc
+
+*.egg
