@@ -17,10 +17,9 @@ class Network(object):
     
     def set_user_sync_url(self, url_template):
         assert '{id}' in url_template, 'url_template should have {id}.'
-        token = self.build_user_auth_token()
         
         url = 'http://{0!s}/'.format(self.network_name)
-        data = {'actor_token' : token, 'pull_profile_url' : url_template}
+        data = {'actor_token' : self.build_lf_token(), 'pull_profile_url' : url_template}
         headers = {'Content-type': 'application/json'}
         
         request = requests.post(url=url, data=data, headers=headers)
@@ -29,22 +28,19 @@ class Network(object):
         
     def sync_user(self, user_id):
         url = 'http://{0!s}/api/v3_0/user/{1!s}/refresh'.format(self.network_name, user_id)
-        data = {'lftoken' : self.build_user_auth_token()}
+        data = {'lftoken' : self.build_lf_token()}
         headers = {'Content-type': 'application/json'}
         
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 200
     
     
-    def build_user_auth_token(self, user_id=None, display_name=None, expires=None):
-        if user_id is None:
-            user_id = self.DEFAULT_USER
-        else:
-            assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
-        if display_name is None:
-            display_name = self.DEFAULT_USER
-        if expires is None:
-            expires = self.DEFAULT_EXPIRES
+    def build_lf_token(self):
+        return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)
+    
+    def build_user_auth_token(self, user_id, display_name, expires):
+        assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
+
         return jwt.encode({
                 'domain': self.network_name,
                 'user_id': user_id,

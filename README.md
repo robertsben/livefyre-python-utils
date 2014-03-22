@@ -16,7 +16,7 @@ Creating tokens:
 **Livefyre token:**
     
     network = Livefyre.get_network(network_name, network_key)
-    network.build_user_auth_token()
+    network.build_lf_token()
 
 **User auth token:**
 

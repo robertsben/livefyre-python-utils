@@ -23,7 +23,7 @@ class LivefyreTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(AssertionError, 'user_id should only contain alphanumeric characters'):
             network.build_user_auth_token('system@blah', 'testName', 86400.0)
         
-        token = network.build_user_auth_token('system', 'testName', 86400.0)
+        token = network.build_lf_token()
         
         self.assertIsNotNone(token)
         self.assertTrue(network.validate_livefyre_token(token))
