@@ -51,7 +51,7 @@ To retrieve content collection data as a tuple:
 
 ## Documentation
 
-Located [here](answers.livefyre.com/libraries).
+Located [here](http://answers.livefyre.com/libraries).
 
 ## Contributing
 
