@@ -9,7 +9,7 @@ Works with Python versions: 2.6, 2.7, 3.2, 3.3
 
 Run this line:
 
-    pip install livefyre
+    $ pip install livefyre
 
 ## Usage
 
