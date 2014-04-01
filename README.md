@@ -67,7 +67,7 @@ site.get_collection_content('article_id')
 
 ## Documentation
 
-Located [here](http://answers.livefyre.com/libraries).
+Located [here](http://answers.livefyre.com/developers/libraries).
 
 ## Contributing
 
