@@ -20,7 +20,7 @@ install_requires = ['PyJWT == 0.1.9', 'requests == 2.2.1']
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.0.2',
+    version='1.1.0',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',

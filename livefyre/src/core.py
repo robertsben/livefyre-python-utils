@@ -1,4 +1,4 @@
-import base64, jwt, re, requests, sys, time
+import base64, jwt, re, requests, sys, time, hashlib
 
 try:
     import simplejson as json
@@ -19,7 +19,7 @@ class Network(object):
         assert '{id}' in url_template, 'url_template should have {id}.'
         
         url = 'http://{0!s}/'.format(self.network_name)
-        data = {'actor_token' : self.build_lf_token(), 'pull_profile_url' : url_template}
+        data = {'actor_token' : self.build_livefyre_token(), 'pull_profile_url' : url_template}
         headers = {'Content-type': 'application/json'}
         
         request = requests.post(url=url, data=data, headers=headers)
@@ -28,15 +28,16 @@ class Network(object):
         
     def sync_user(self, user_id):
         url = 'http://{0!s}/api/v3_0/user/{1!s}/refresh'.format(self.network_name, user_id)
-        data = {'lftoken' : self.build_lf_token()}
+        data = {'lftoken' : self.build_livefyre_token()}
         headers = {'Content-type': 'application/json'}
         
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 200
     
     
-    def build_lf_token(self):
+    def build_livefyre_token(self):
         return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)
+    
     
     def build_user_auth_token(self, user_id, display_name, expires):
         assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
@@ -67,17 +68,24 @@ class Site(object):
         self.site_key = site_key
     
     
-    def build_collection_meta_token(self, title, article_id, url, tags, stream=''):
+    def build_collection_meta_token(self, title, article_id, url, tags='', stream=None):
         assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
-        return jwt.encode({
-                'title': title,
-                'url': url,
-                'tags': tags,
-                'articleId': article_id,
-                'type': stream
-                },
-            self.site_key)
+        
+        meta_string = '{{"url":"{0}","tags":"{1}","title":"{2}"}}'.format(url, tags, title)
+        checksum = hashlib.md5(meta_string).hexdigest()
+
+        collection_meta = {
+            'title': title,
+            'url': url,
+            'tags': tags,
+            'articleId': article_id,
+            'checksum': checksum
+        }
+        if stream:
+            collection_meta['type'] = stream
+
+        return jwt.encode(collection_meta, self.site_key)
     
     
     def get_collection_content(self, article_id):
@@ -91,4 +99,10 @@ class Site(object):
         response = requests.get(url=url)
         if response.status_code == 200:
             return json.loads(response.content)
-        return ''
+        return None
+
+    def get_collection_id(self, article_id):
+        json = self.get_collection_content(article_id)
+        if json:
+            return json['collectionSettings']['collectionId']
+        return None

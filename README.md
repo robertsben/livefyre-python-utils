@@ -13,56 +13,60 @@ Run this line:
 
 ## Usage
 
-Creating tokens:
-
-**Livefyre token:**
-
-```python
-Livefyre.get_network('network_name', 'network_key').build_lf_token()
-```
-
-**User auth token:**
+Instantiating a network object:
 
 ```python
 network = Livefyre.get_network('network_name', 'network_key')
+```
 
+Building a Livefyre token:
+
+```python
+network.build_livefyre_token()
+```
+
+Building a user auth token:
+
+```python
 network.build_user_auth_token('user_id', 'display_name', expires)
-```
-
-**Collection meta token:**
-The 'stream' argument is optional.
-
-```python
-network = Livefyre.get_network('network_name', 'network_key')
-site = network.get_site('site_id', 'site_key')
-
-site.build_collection_meta_token('title', 'article_id', 'url', 'tags', 'stream')
 ```
 
 To validate a Livefyre token:
 
 ```python
-network = Livefyre.get_network('network_name', 'network_key')
-
-network.validate_livefyre_token('token')
+network.validate_livefyre_token('lf_token')
 ```
 
 To send Livefyre a user sync url and then have Livefyre pull user data from that url:
 
 ```python
-network = Livefyre.get_network('network_name', 'network_key')
-
-network.set_user_sync_url('url{id}')
-network.sync_user('system')
+network.set_user_sync_url('url_template')
+network.sync_user('user_id')
 ```
 
-To retrieve content collection data as a tuple:
+Instantiating a site object:
 
 ```python
-network = Livefyre.get_network('network_name', 'network_key')
 site = network.get_site('site_id', 'site_key')
+```
 
+Building a collection meta token:
+*The 'tags' and stream' arguments are optional.*
+
+```python
+site.build_collection_meta_token('title', 'article_id', 'url', 'tags', 'stream')
+```
+
+To retrieve content collection data:
+
+```python
 site.get_collection_content('article_id')
+```
+
+To get a content collection's id:
+
+```python
+site.get_collection_id('article_id')
 ```
 
 ## Documentation

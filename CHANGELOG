@@ -1,4 +1,7 @@
-=== 1.0.2 2014-03-19
+=== 1.1.0 2014-04-07
+
+* Added get_collection_id method, and added checksum to buildCollectionMetaToken. Changed method from buildLfToken to 
+* buildLivefyreToken
 
 * Needed addn. changes to ensure that python3 is supported.
 
