@@ -3,11 +3,13 @@ import unittest
 from livefyre import Livefyre
 
 class LivefyreTestCase(unittest.TestCase):
-    NETWORK = 'test.fyre.com';
-    NETWORK_KEY = 'testkeytest';
+    NETWORK = 'test.fyre.com'
+    NETWORK_KEY = 'testkeytest'
     
-    SITE_ID = '1';
-    SITE_KEY = 'testkeytest';
+    SITE_ID = '1'
+    SITE_KEY = 'testkeytest'
+    
+    CHECKSUM = '6e2e4faf7b95f896260fe695eafb34ba'
     
     def setUp(self):
         pass
@@ -40,6 +42,18 @@ class LivefyreTestCase(unittest.TestCase):
         token = site.build_collection_meta_token('title', 'articleId', 'https://www.url.com', 'tags', 'reviews')
         
         self.assertIsNotNone(token)
+        
+    def test_build_checksum(self):
+        site = Livefyre.get_network(self.NETWORK, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)
+        
+        with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
+            site.build_checksum('title', 'url', 'tags')
+            
+        with self.assertRaisesRegexp(AssertionError, "title's length should be under 255 char"):
+            site.build_checksum('1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456', 'http://url.com', 'tags')
+       
+        checksum = site.build_checksum('title', 'https://www.url.com', 'tags')
+        self.assertEquals(self.CHECKSUM, checksum, 'checksum is not correct.')
         
         
 if __name__ == '__main__':

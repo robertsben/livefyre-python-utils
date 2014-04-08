@@ -72,20 +72,25 @@ class Site(object):
         assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
         
-        meta_string = '{{"url":"{0}","tags":"{1}","title":"{2}"}}'.format(url, tags, title)
-        checksum = hashlib.md5(meta_string).hexdigest()
-
         collection_meta = {
             'title': title,
             'url': url,
             'tags': tags,
-            'articleId': article_id,
-            'checksum': checksum
+            'articleId': article_id
         }
         if stream:
             collection_meta['type'] = stream
 
         return jwt.encode(collection_meta, self.site_key)
+    
+    
+    def build_checksum(self, title, url, tags=''):
+        assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
+        assert len(title) <= 255, "title's length should be under 255 char"
+        
+        meta_string = '{{"url":"{0}","tags":"{1}","title":"{2}"}}'.format(url, tags, title)
+
+        return hashlib.md5(meta_string).hexdigest()
     
     
     def get_collection_content(self, article_id):

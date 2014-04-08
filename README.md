@@ -57,6 +57,13 @@ Building a collection meta token:
 site.build_collection_meta_token('title', 'article_id', 'url', 'tags', 'stream')
 ```
 
+Building a checksum:
+*The 'tags' argument is optional.*
+
+```python
+site.build_checksum('title', 'url', 'tags')
+```
+
 To retrieve content collection data:
 
 ```python
