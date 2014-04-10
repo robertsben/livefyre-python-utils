@@ -1,4 +1,6 @@
-import base64, jwt, re, requests, sys, time, hashlib
+import base64, sys, time, hashlib
+import jwt, requests
+from livefyre.src.utils import is_valid_full_url
 
 try:
     import simplejson as json
@@ -69,7 +71,7 @@ class Site(object):
     
     
     def build_collection_meta_token(self, title, article_id, url, tags='', stream=None):
-        assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
+        assert is_valid_full_url(url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
         
         collection_meta = {
@@ -85,7 +87,7 @@ class Site(object):
     
     
     def build_checksum(self, title, url, tags=''):
-        assert re.match(r'^http[s]{0,1}://[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63})*$', url), 'url must be a full domain. ie. http://livefyre.com'
+        assert is_valid_full_url(url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
         
         meta_string = '{{"url":"{0}","tags":"{1}","title":"{2}"}}'.format(url, tags, title)
