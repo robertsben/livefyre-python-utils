@@ -1,4 +1,4 @@
-import unittest
+import jwt, unittest
 
 from livefyre import Livefyre
 
@@ -39,9 +39,18 @@ class LivefyreTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(AssertionError, "title's length should be under 255 char"):
             site.build_collection_meta_token('1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456', 'article_id', 'http://url.com', 'tags')
         
-        token = site.build_collection_meta_token('title', 'articleId', 'https://www.url.com', 'tags', 'reviews')
+        with self.assertRaisesRegexp(AssertionError, 'type is not a recognized type. should be liveblog, livechat, livecomments, reviews, sidenotes, or an empty string.'):
+            site.build_collection_meta_token('title', 'articleId', 'http://livefyre.com', 'tags', 'bad type')
+        
+        token = site.build_collection_meta_token('title', 'articleId', 'https://livefyre.com', 'tags')
         
         self.assertIsNotNone(token)
+        
+        token = site.build_collection_meta_token('title', 'articleId', 'https://livefyre.com', 'tags', 'reviews')
+        self.assertEquals(jwt.decode(token, self.SITE_KEY)['type'], 'reviews')
+        
+        token = site.build_collection_meta_token('title', 'articleId', 'https://livefyre.com', 'tags', 'liveblog')
+        self.assertEquals(jwt.decode(token, self.SITE_KEY)['stream_type'], 'liveblog')
         
     def test_build_checksum(self):
         site = Livefyre.get_network(self.NETWORK, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)

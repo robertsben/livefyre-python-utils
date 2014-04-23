@@ -64,13 +64,16 @@ class Network(object):
 
 
 class Site(object):
+    TYPE = ['reviews', 'sidenotes']
+    STREAM_TYPE = ['liveblog', 'livechat', 'livecomments']
+    
     def __init__(self, network_name, site_id, site_key):
         self.network_name = network_name
         self.site_id = site_id
         self.site_key = site_key
     
     
-    def build_collection_meta_token(self, title, article_id, url, tags='', stream=None):
+    def build_collection_meta_token(self, title, article_id, url, tags='', s_type=None):
         assert is_valid_full_url(url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
         
@@ -80,8 +83,13 @@ class Site(object):
             'tags': tags,
             'articleId': article_id
         }
-        if stream:
-            collection_meta['type'] = stream
+        if s_type:
+            if s_type in self.TYPE:
+                collection_meta['type'] = s_type
+            elif s_type in self.STREAM_TYPE:
+                collection_meta['stream_type'] = s_type
+            else:
+                raise AssertionError('type is not a recognized type. should be liveblog, livechat, livecomments, reviews, sidenotes, or an empty string.')
 
         return jwt.encode(collection_meta, self.site_key)
     

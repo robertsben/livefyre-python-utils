@@ -51,10 +51,10 @@ site = network.get_site('site_id', 'site_key')
 ```
 
 Building a collection meta token:
-*The 'tags' and stream' arguments are optional.*
+*The 'tags' and s_type' arguments are optional.*
 
 ```python
-site.build_collection_meta_token('title', 'article_id', 'url', 'tags', 'stream')
+site.build_collection_meta_token('title', 'article_id', 'url', 'tags', 's_type')
 ```
 
 Building a checksum:
