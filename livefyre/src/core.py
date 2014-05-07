@@ -64,8 +64,7 @@ class Network(object):
 
 
 class Site(object):
-    TYPE = ['reviews', 'sidenotes']
-    STREAM_TYPE = ['liveblog', 'livechat', 'livecomments']
+    TYPE = ['reviews', 'sidenotes', 'ratings', 'counting', 'liveblog', 'livechat', 'livecomments']
     
     def __init__(self, network_name, site_id, site_key):
         self.network_name = network_name
@@ -86,10 +85,8 @@ class Site(object):
         if s_type:
             if s_type in self.TYPE:
                 collection_meta['type'] = s_type
-            elif s_type in self.STREAM_TYPE:
-                collection_meta['stream_type'] = s_type
             else:
-                raise AssertionError('type is not a recognized type. should be liveblog, livechat, livecomments, reviews, sidenotes, or an empty string.')
+                raise AssertionError('type is not a recognized type. must be in {0}'.format(self.TYPE))
 
         return jwt.encode(collection_meta, self.site_key)
     

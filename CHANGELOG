@@ -1,8 +1,10 @@
-=== 1.1.3 2014-04-23
+=== 1.1.4 2014-04-23
 
-* Renaming stream to s_type and adding checks to make sure that type is of a recognized type. Adding legacy stream_type support.
+* Added rating, counting as acceptable types. Removed stream_type.
 
-* Fixing url validator. Adding utility class.
+* Renamed stream to s_type and adding checks to make sure that type is of a recognized type. Adding legacy stream_type support.
+
+* Fixed url validator. Adding utility class.
 
 * Made building checksum into its method.
 
