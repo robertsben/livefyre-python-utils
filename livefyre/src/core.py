@@ -100,27 +100,6 @@ class Site(object):
         return hashlib.md5(meta_string).hexdigest()
     
     
-    def create_collection(self, title, article_id, url, tags='', s_type=None):
-        url = 'http://quill.{0!s}/api/v3.0/site/{1!s}/collection/create/'.format(self.network_name, self.site_id)
-        data = {
-            'articleId': article_id,
-            'collectionMeta': self.build_collection_meta_token(title, article_id, url, tags, s_type),
-            'checksum': self.build_checksum(title, url, tags),
-        }
-        headers = {'content-type': 'application/json'}
-            
-        response = requests.post(url, params={'sync':1}, data=json.dumps(data), headers=headers)
-        
-        if response.status_code == 200:
-            return response.json()['data']['collectionId']
-        return None
-    
-    
-    def make_moderator(self, user_id):
-        pass
-        #see code from ross first
-    
-    
     def get_collection_content(self, article_id):
         if sys.version_info >= (3, 0):
             article_bytes = bytes(str(article_id), 'utf-8')
