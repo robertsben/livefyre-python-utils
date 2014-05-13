@@ -30,6 +30,7 @@ class LivefyreTestCase(unittest.TestCase):
         self.assertIsNotNone(token)
         self.assertTrue(network.validate_livefyre_token(token))
         
+        
     def test_build_collection_token(self):
         site = Livefyre.get_network(self.NETWORK, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)
         
