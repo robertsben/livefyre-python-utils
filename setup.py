@@ -1,5 +1,6 @@
 from setuptools import find_packages
 
+
 try:
     from setuptools import setup
 except ImportError:
@@ -15,12 +16,12 @@ try:
 except IOError:
     readme = ''
 
-install_requires = ['PyJWT == 0.1.9', 'requests == 2.2.1']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.2.1', 'python-dateutil == 2.2']
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.1.4',
+    version='1.3.0',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',

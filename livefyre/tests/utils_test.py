@@ -4,6 +4,7 @@ import unittest
 
 from livefyre.src.utils import is_valid_full_url
 
+
 class UtilsTestCase(unittest.TestCase):
     def test_validate_url(self):
         self.assertFalse(is_valid_full_url("test.com"))

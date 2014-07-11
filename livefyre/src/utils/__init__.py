@@ -1,4 +1,5 @@
-import re, urlparse
+import re
+import urlparse
 
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
