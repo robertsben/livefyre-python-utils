@@ -5,6 +5,7 @@
 * Added personal stream and timeline support.
 * Updated checksum formula to match other libraries.
 * Refactored core objects.
+* Updated create_collection_meta to take in a dict of optional params.
 
 
 === 1.1.4 2014-05-07
