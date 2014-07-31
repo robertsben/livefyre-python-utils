@@ -10,29 +10,12 @@ except ImportError:
 
 
 def get_url(core):
-    return PersonalizedStreamsClient.BASE_URL.format(core.get_urn())
-
-def get_topic_ids(topics):
-    topic_ids = []
-    for topic in topics:
-        topic_ids.append(topic.topic_id)
-    return topic_ids
-
-def build_subscriptions_json(topics, user):
-    subscriptions = []
-    for topic in topics:
-        subscriptions.append(Subscription(topic.topic_id, user, SubscriptionType.personalStream).serialize_to_json())
-        
-def to_json(objs):
-    objs_json = []
-    for obj in objs:
-        objs_json.append(obj.serialize_to_json())
-    return objs_json
+    return PersonalizedStreamsClient.BASE_URL.format(core.get_network_name())
 
 
 class PersonalizedStreamsClient(object):
-    BASE_URL = 'http://quill.{}/api/v4'
-    STREAM_BASE_URL = 'http://bootstrap.{}/api/v4'
+    BASE_URL = 'https://{}.quill.fyre.co/api/v4'
+    STREAM_BASE_URL = 'https://bootstrap.livefyre.com/api/v4'
     
     TOPIC_PATH = '/{}/'
     MULTIPLE_TOPIC_PATH = '/{}:topics/';
@@ -50,20 +33,9 @@ class PersonalizedStreamsClient(object):
         response = requests.get(url, headers = headers)
         data = response.json()['data']
         
-        return Topic.serialize_from_json(data['topic'])
+        return Topic.serialize_from_json(data['topic']) if 'topic' in data else None
 
 
-    @staticmethod
-    def post_topic(core, topic):
-        created, updated = PersonalizedStreamsClient.post_topics(core, [topic])
-        return created is 1 or updated is 1
-        
-        
-    @staticmethod
-    def patch_topic(core, topic):
-        return PersonalizedStreamsClient.delete_topics(core, [topic]) is 1
-    
-    
     @staticmethod
     def get_topics(core, limit, offset):
         url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
@@ -72,7 +44,7 @@ class PersonalizedStreamsClient(object):
         response = requests.get(url, params = {'limit': limit, 'offset': offset}, headers = headers)
         data = response.json()['data']
         
-        return [Topic.serialize_from_json(x) for x in data['topics']]
+        return [Topic.serialize_from_json(x) for x in data['topics']] if 'topics' in data else []
 
 
     @staticmethod
@@ -81,7 +53,7 @@ class PersonalizedStreamsClient(object):
             assert topic.label and len(topic.label) <= 128, 'topic label should not be empty and have 128 or less characters'
         
         url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
-        form = json.dumps({'topics': to_json(topics)})
+        form = json.dumps({'topics': [x.to_dict() for x in topics]})
         headers = get_lf_token_header(core)
         headers['Content-Type'] = 'application/json'
         
@@ -97,14 +69,14 @@ class PersonalizedStreamsClient(object):
     @staticmethod
     def patch_topics(core, topics):
         url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
-        form = json.dumps({'topics': to_json(topics)})
+        form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(core)
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
         data = response.json()['data']
         
-        return data['deleted']
+        return data['deleted'] if 'deleted' in data else 0
     
     
     @staticmethod
@@ -115,26 +87,26 @@ class PersonalizedStreamsClient(object):
         response = requests.get(url, headers = headers)
         data = response.json()['data']
         
-        return data['topicIds']
+        return data['topicIds'] if 'topicIds' in data else None
 
 
     @staticmethod
     def post_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
-        form = json.dumps({'topicIds': get_topic_ids(topics)})
+        form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
         data = response.json()['data']
 
-        return data['added']
+        return data['added'] if 'added' in data else 0
     
     
     @staticmethod
     def put_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
-        form = json.dumps({'topicIds': get_topic_ids(topics)})
+        form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
         
@@ -150,14 +122,14 @@ class PersonalizedStreamsClient(object):
     @staticmethod
     def patch_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
-        form = json.dumps({'delete': get_topic_ids(topics)})
+        form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
         data = response.json()['data']
     
-        return data['removed']
+        return data['removed'] if 'removed' in data else 0
     
     
     @staticmethod
@@ -168,26 +140,26 @@ class PersonalizedStreamsClient(object):
         response = requests.get(url, headers = headers)
         data = response.json()['data']
         
-        return [Subscription.serialize_from_json(x) for x in data['subscriptions']]
+        return [Subscription.serialize_from_json(x) for x in data['subscriptions']] if 'subscriptions' in data else []
 
 
     @staticmethod
     def post_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
-        form = json.dumps({'subscriptions': build_subscriptions_json(topics, user)})
+        form = json.dumps({'subscriptions': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
         data = response.json()['data']
         
-        return data['added']
+        return data['added'] if 'added' in data else 0
     
     
     @staticmethod
     def put_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
-        form = json.dumps({'subscriptions': build_subscriptions_json(topics, user)})
+        form = json.dumps({'subscriptions': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
         headers['Content-Type'] = 'application/json'
         
@@ -203,14 +175,14 @@ class PersonalizedStreamsClient(object):
     @staticmethod
     def patch_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
-        form = json.dumps({'delete': build_subscriptions_json(topics, user)})
+        form = json.dumps({'delete': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
         data = response.json()['data']
     
-        return data['removed']
+        return data['removed'] if 'removed' in data else 0
     
     
     @staticmethod
@@ -222,18 +194,18 @@ class PersonalizedStreamsClient(object):
         data = response.json()['data']
         
         
-        return [Subscription.serialize_from_json(x) for x in data['subscriptions']]
+        return [Subscription.serialize_from_json(x) for x in data['subscriptions']] if 'subscriptions' in data else []
     
     
     @staticmethod
     def get_timeline_stream(core, resource, limit, until, since):
-        url = get_url(core) + PersonalizedStreamsClient.TIMELINE_PATH
+        url = PersonalizedStreamsClient.STREAM_BASE_URL + PersonalizedStreamsClient.TIMELINE_PATH
         headers = get_lf_token_header(core)
-        params = {'limit': limit}
+        params = {'resource': resource, 'limit': limit}
         if until is not None:
             params['until'] = until
         elif since is not None:
             params['since'] = since
-        
+
         return requests.get(url, params = params, headers = headers).json()
     

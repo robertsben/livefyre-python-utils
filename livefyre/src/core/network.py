@@ -15,6 +15,7 @@ class Network(object):
     def __init__(self, name, key):
         self.name = name
         self.key = key
+        self.network_name = name.split('.')[0]
     
     
     def set_user_sync_url(self, url_template):
@@ -59,6 +60,10 @@ class Network(object):
             and token_attr['expires'] >= int(time.time()))
         
     
+    def get_site(self, s_id, key):
+        return Site(self, s_id, key)
+    
+    
     # Topic API
     def get_topic(self, topic_id):
         return PersonalizedStreamsClient.get_topic(self, topic_id)
@@ -66,13 +71,13 @@ class Network(object):
     
     def create_or_update_topic(self, topic_id, label):
         topic = Topic.create(self, topic_id, label)
-        PersonalizedStreamsClient.post_topic(self, topic)
+        PersonalizedStreamsClient.post_topics(self, [topic])
         
         return topic
 
 
     def delete_topic(self, topic):
-        return PersonalizedStreamsClient.patch_topic(self, topic)
+        return PersonalizedStreamsClient.patch_topics(self, [topic]) == 1
 
 
     # Multiple Topic API
@@ -81,13 +86,15 @@ class Network(object):
     
     
     def create_or_update_topics(self, topic_value_map):
-        topics = {}
+        topics = []
         try:
             topics = [Topic.create(self, k, v) for k, v in topic_value_map.iteritems()]
         except:
             topics = [Topic.create(self, k, v) for k, v in topic_value_map.items()]
             
-        return PersonalizedStreamsClient.post_topics(self, topics)
+        PersonalizedStreamsClient.post_topics(self, topics)
+            
+        return topics
 
 
     def delete_topics(self, topics):
@@ -125,13 +132,13 @@ class Network(object):
         return CursorFactory.get_personal_stream_cursor(self, user, limit, date)
         
         
+    def get_network_name(self):
+        return self.network_name
+    
+        
     def get_urn(self):
         return 'urn:livefyre:' + self.name
     
     
     def get_user_urn(self, user):
         return self.get_urn() + ':user=' + user
-        
-    
-    def get_site(self, site_id, site_key):
-        return Site(self, site_id, site_key)

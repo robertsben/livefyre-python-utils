@@ -12,7 +12,7 @@ class LivefyreTestCase(unittest.TestCase):
         pass
 
     def test_build_collection_token(self):
-        site = Livefyre.get_network(Config.NETWORK, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
+        site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
         
         with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
             site.build_collection_meta_token('title', 'articleId', 'url.com')
@@ -34,7 +34,7 @@ class LivefyreTestCase(unittest.TestCase):
         self.assertEquals(jwt.decode(token, Config.SITE_KEY)['type'], 'liveblog')
         
     def test_build_checksum(self):
-        site = Livefyre.get_network(Config.NETWORK, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
+        site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
         
         with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
             site.build_checksum('title', 'url', 'tags')

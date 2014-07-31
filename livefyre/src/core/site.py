@@ -16,10 +16,10 @@ except ImportError:
 class Site(object):
     TYPE = ['reviews', 'sidenotes', 'ratings', 'counting', 'liveblog', 'livechat', 'livecomments']
     
-    def __init__(self, network, site_id, site_key):
+    def __init__(self, network, s_id, key):
         self.network = network
-        self.site_id = site_id
-        self.site_key = site_key
+        self.s_id = s_id
+        self.key = key
     
     
     def build_collection_meta_token(self, title, article_id, url, options={}):
@@ -36,7 +36,7 @@ class Site(object):
             raise AssertionError('type is not a recognized type. must be in {0}'.format(self.TYPE))
         
         collection_meta.update(options)
-        return jwt.encode(collection_meta, self.site_key)
+        return jwt.encode(collection_meta, self.key)
     
     
     def build_checksum(self, title, url, tags=''):
@@ -49,7 +49,7 @@ class Site(object):
     
     
     def create_collection(self, title, article_id, url, tags='', s_type=None):
-        url = 'http://quill.{0!s}/api/v3.0/site/{1!s}/collection/create/'.format(self.network.name, self.site_id)
+        url = 'http://quill.{0}/api/v3.0/site/{1}/collection/create/'.format(self.network.name, self.s_id)
         data = {
             'articleId': article_id,
             'collectionMeta': self.build_collection_meta_token(title, article_id, url, tags, s_type),
@@ -70,7 +70,7 @@ class Site(object):
         else:
             article_bytes = bytes(str(article_id))
         encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')
-        url = 'http://bootstrap.{0!s}/bs3/{0!s}/{1!s}/{2!s}/init'.format(self.network.name, self.site_id, encoded_article_id)
+        url = 'http://bootstrap.livefyre.com/bs3/{0}/{1}/{2}/init'.format(self.network.name, self.s_id, encoded_article_id)
         
         response = requests.get(url=url)
         if response.status_code == 200:
@@ -83,6 +83,10 @@ class Site(object):
         if json:
             return json['collectionSettings']['collectionId']
         return None
+    
+    
+    def build_livefyre_token(self):
+        return self.network.build_livefyre_token()
 
 
     # Topic API
@@ -92,13 +96,13 @@ class Site(object):
     
     def create_or_update_topic(self, topic_id, label):
         topic = Topic.create(self, topic_id, label)
-        PersonalizedStreamsClient.post_topic(self, topic)
+        PersonalizedStreamsClient.post_topics(self, [topic])
         
         return topic
 
 
     def delete_topic(self, topic):
-        return PersonalizedStreamsClient.patch_topic(self, topic)
+        return PersonalizedStreamsClient.patch_topics(self, [topic]) == 1
 
 
     # Multiple Topic API
@@ -107,13 +111,15 @@ class Site(object):
     
     
     def create_or_update_topics(self, topic_value_map):
-        topics = {}
+        topics = []
         try:
             topics = [Topic.create(self, k, v) for k, v in topic_value_map.iteritems()]
         except:
             topics = [Topic.create(self, k, v) for k, v in topic_value_map.items()]
             
-        return PersonalizedStreamsClient.post_topics(self, topics)
+        PersonalizedStreamsClient.post_topics(self, topics)
+            
+        return topics
 
 
     def delete_topics(self, topics):
@@ -138,10 +144,13 @@ class Site(object):
     
     
     # Timeline cursor
-    
     def get_topic_stream_cursor(self, topic, limit = 50, date = datetime.now()):
         return CursorFactory.get_topic_stream_cursor(self, topic, limit, date)
 
 
+    def get_network_name(self):
+        return self.network.get_network_name()
+    
+
     def get_urn(self):
-        return self.network.get_urn() + ":site=" + self.site_id
+        return self.network.get_urn() + ":site=" + self.s_id

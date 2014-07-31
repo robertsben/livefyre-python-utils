@@ -10,5 +10,5 @@ class CursorFactory(object):
     
     @staticmethod
     def get_personal_stream_cursor(network, user, limit, date):
-        resource = network.get_user_urn(user) +"personalStream"
+        resource = network.get_user_urn(user) +":personalStream"
         return TimelineCursor(network, resource, limit, date)
