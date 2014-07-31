@@ -60,8 +60,8 @@ class Network(object):
             and token_attr['expires'] >= int(time.time()))
         
     
-    def get_site(self, s_id, key):
-        return Site(self, s_id, key)
+    def get_site(self, site_id, site_key):
+        return Site(self, site_id, site_key)
     
     
     # Topic API

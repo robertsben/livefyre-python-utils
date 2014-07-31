@@ -1,8 +1,8 @@
 class Config:    
-    NETWORK_NAME = '<NETWORK-NAME>';
-    NETWORK_KEY = '<NETWORK-KEY>';
-    SITE_ID = '<SITE-ID>';
-    SITE_KEY = '<SITE-KEY>';
-    COLLECTION_ID = '<COLLECTION-ID>';
-    USER = '<USER-ID>';
-    ARTICLE_ID = '<ARTICLE-ID>';
+    NETWORK_NAME = '<NETWORK-NAME>'
+    NETWORK_KEY = '<NETWORK-KEY>'
+    SITE_ID = '<SITE-ID>'
+    SITE_KEY = '<SITE-KEY>'
+    COLLECTION_ID = '<COLLECTION-ID>'
+    USER = '<USER-ID>'
+    ARTICLE_ID = '<ARTICLE-ID>'
