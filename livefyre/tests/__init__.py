@@ -4,5 +4,5 @@ class Config:
     SITE_ID = '<SITE-ID>'
     SITE_KEY = '<SITE-KEY>'
     COLLECTION_ID = '<COLLECTION-ID>'
-    USER = '<USER-ID>'
+    USER_ID = '<USER-ID>'
     ARTICLE_ID = '<ARTICLE-ID>'

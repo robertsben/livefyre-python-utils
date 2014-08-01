@@ -37,7 +37,17 @@ class PersonalizedStreamsClient(object):
 
 
     @staticmethod
-    def get_topics(core, limit, offset):
+    def create_or_update_topic(core, topic_id, label):
+        return PersonalizedStreamsClient.create_or_update_topics(core, { topic_id: label })[0]
+        
+    
+    @staticmethod
+    def delete_topic(core, topic):
+        return PersonalizedStreamsClient.delete_topics(core, [topic]) == 1
+
+
+    @staticmethod
+    def get_topics(core, limit = 100, offset = 0):
         url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
         headers = get_lf_token_header(core)
 
@@ -48,7 +58,13 @@ class PersonalizedStreamsClient(object):
 
 
     @staticmethod
-    def post_topics(core, topics):
+    def create_or_update_topics(core, topic_map):
+        topics = []
+        try:
+            topics = [Topic.create(core, k, v) for k, v in topic_map.iteritems()]
+        except:
+            topics = [Topic.create(core, k, v) for k, v in topic_map.items()]
+        
         for topic in topics:
             assert topic.label and len(topic.label) <= 128, 'topic label should not be empty and have 128 or less characters'
         
@@ -58,16 +74,13 @@ class PersonalizedStreamsClient(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
-        data = response.json()['data']
+        response.json()['data']
         
-        created = data['created'] if 'created' in data else 0
-        updated = data['updated'] if 'updated' in data else 0
-            
-        return created, updated
+        return topics
         
         
     @staticmethod
-    def patch_topics(core, topics):
+    def delete_topics(core, topics):
         url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
         form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(core)
@@ -91,7 +104,7 @@ class PersonalizedStreamsClient(object):
 
 
     @staticmethod
-    def post_collection_topics(site, collection_id, topics):
+    def add_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
@@ -104,7 +117,7 @@ class PersonalizedStreamsClient(object):
     
     
     @staticmethod
-    def put_collection_topics(site, collection_id, topics):
+    def replace_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
@@ -120,7 +133,7 @@ class PersonalizedStreamsClient(object):
         
         
     @staticmethod
-    def patch_collection_topics(site, collection_id, topics):
+    def remove_collection_topics(site, collection_id, topics):
         url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
@@ -144,7 +157,7 @@ class PersonalizedStreamsClient(object):
 
 
     @staticmethod
-    def post_subscriptions(network, user, topics):
+    def add_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
         form = json.dumps({'subscriptions': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
@@ -157,7 +170,7 @@ class PersonalizedStreamsClient(object):
     
     
     @staticmethod
-    def put_subscriptions(network, user, topics):
+    def replace_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
         form = json.dumps({'subscriptions': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
@@ -173,7 +186,7 @@ class PersonalizedStreamsClient(object):
         
         
     @staticmethod
-    def patch_subscriptions(network, user, topics):
+    def remove_subscriptions(network, user, topics):
         url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user))
         form = json.dumps({'delete': [Subscription(x.topic_id, user, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user)
@@ -186,7 +199,7 @@ class PersonalizedStreamsClient(object):
     
     
     @staticmethod
-    def get_subscribers(network, topic, limit, offset):
+    def get_subscribers(network, topic, limit = 100, offset = 0):
         url = get_url(network) + PersonalizedStreamsClient.TOPIC_SUBSCRIPTION_PATH.format(topic.topic_id)
         headers = get_lf_token_header(network)
 

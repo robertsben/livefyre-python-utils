@@ -3,6 +3,8 @@ import unittest
 from livefyre import Livefyre
 from livefyre.tests import Config
 from livefyre.src.entity import Topic
+from livefyre.src.api.personalizedstreams import PersonalizedStreamsClient
+from livefyre.src.factory import CursorFactory
 
 
 class LivefyreTestCase():#unittest.TestCase):
@@ -12,63 +14,63 @@ class LivefyreTestCase():#unittest.TestCase):
         
 
     def test_network_topic(self):
-        topic = self.network.create_or_update_topic('1', 'UN')
-        topic = self.network.get_topic(1)
-        deleted = self.network.delete_topic(topic)
-        topics = self.network.get_topics()
+        topic = PersonalizedStreamsClient.create_or_update_topic(self.network, '1', 'UN')
+        topic = PersonalizedStreamsClient.get_topic(self.network, 1)
+        deleted = PersonalizedStreamsClient.delete_topic(self.network, topic)
+        topics = PersonalizedStreamsClient.get_topics(self.network)
      
      
     def test_site_topic(self):
-        topic = self.site.create_or_update_topic('2', 'DEUX')
-        topic = self.site.get_topic(2)
-        deleted = self.site.delete_topic(topic)
-        topics = self.site.get_topics()
+        topic = PersonalizedStreamsClient.create_or_update_topic(self.site, '2', 'DEUX')
+        topic = PersonalizedStreamsClient.get_topic(self.site, 2)
+        deleted = PersonalizedStreamsClient.delete_topic(self.site, topic)
+        topics = PersonalizedStreamsClient.get_topics(self.site)
      
      
     def test_network_topics(self):
         topics = {'1': 'UN', '2': 'DEUX'}
-        returned_topics = self.network.create_or_update_topics(topics)
-        returned_topics = self.network.get_topics()
-        deleted = self.network.delete_topics(returned_topics)
-        topics = self.network.get_topics()
+        returned_topics = PersonalizedStreamsClient.create_or_update_topics(self.network, topics)
+        returned_topics = PersonalizedStreamsClient.get_topics(self.network)
+        deleted = PersonalizedStreamsClient.delete_topics(self.network, returned_topics)
+        topics = PersonalizedStreamsClient.get_topics(self.network)
      
      
     def test_site_topics(self):
         topics = {'1': 'UN', '2': 'DEUX'}
-        returned_topics = self.site.create_or_update_topics(topics)
-        returned_topics = self.site.get_topics()
-        deleted = self.site.delete_topics(returned_topics)
-        topics = self.site.get_topics()
+        returned_topics = PersonalizedStreamsClient.create_or_update_topics(self.site, topics)
+        returned_topics = PersonalizedStreamsClient.get_topics(self.site)
+        deleted = PersonalizedStreamsClient.delete_topics(self.site, returned_topics)
+        topics = PersonalizedStreamsClient.get_topics(self.site)
      
      
     def test_collection_topics(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
-        topics = self.site.create_or_update_topics(topic_dict)
+        topics = PersonalizedStreamsClient.create_or_update_topics(self.site, topic_dict)
          
-        added = self.site.add_collection_topics(Config.COLLECTION_ID, topics)
-        added, removed = self.site.update_collection_topics(Config.COLLECTION_ID, [topics[0]])
-        removed = self.site.remove_collection_topics(Config.COLLECTION_ID, [topics[0]])
-        collection_topics = self.site.get_collection_topics(Config.COLLECTION_ID)
+        added = PersonalizedStreamsClient.add_collection_topics(self.site, Config.COLLECTION_ID, topics)
+        added, removed = PersonalizedStreamsClient.replace_collection_topics(self.site, Config.COLLECTION_ID, [topics[0]])
+        removed = PersonalizedStreamsClient.remove_collection_topics(self.site, Config.COLLECTION_ID, [topics[0]])
+        collection_topics = PersonalizedStreamsClient.get_collection_topics(self.site, Config.COLLECTION_ID)
          
-        self.site.delete_topics(topics)
-     
+        PersonalizedStreamsClient.delete_topics(self.site, topics)
+
      
     def test_subscription_api(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
-        topics = self.network.create_or_update_topics(topic_dict)
+        topics = PersonalizedStreamsClient.create_or_update_topics(self.network, topic_dict)
          
-        added = self.network.add_subscriptions(Config.USER, topics)
-        user_subs = self.network.get_subscriptions(Config.USER)
-        added, removed = self.network.update_subscriptions(Config.USER, [topics[1]])
-        user_subs = self.network.get_subscribers(topics[1])
-        removed = self.network.remove_subscriptions(Config.USER, [topics[1]])
+        added = PersonalizedStreamsClient.add_subscriptions(self.network, Config.USER_ID, topics)
+        user_subs = PersonalizedStreamsClient.get_subscriptions(self.network, Config.USER_ID)
+        added, removed = PersonalizedStreamsClient.replace_subscriptions(self.network, Config.USER_ID, [topics[1]])
+        user_subs = PersonalizedStreamsClient.get_subscribers(self.network, topics[1])
+        removed = PersonalizedStreamsClient.remove_subscriptions(self.network, Config.USER_ID, [topics[1]])
          
-        self.network.delete_topics(topics)
+        PersonalizedStreamsClient.delete_topics(self.network, topics)
     
     def test_timeline_cursor(self):
         topic = Topic.create(self.network, "1", "UN")
         
-        cursor = self.network.get_topic_stream_cursor(topic)
+        cursor = CursorFactory.get_topic_stream_cursor(self.network, topic)
         data1 = cursor.previous()
         data2 = cursor.next()
 

@@ -89,65 +89,6 @@ class Site(object):
         return self.network.build_livefyre_token()
 
 
-    # Topic API
-    def get_topic(self, topic_id):
-        return PersonalizedStreamsClient.get_topic(self, topic_id)
-    
-    
-    def create_or_update_topic(self, topic_id, label):
-        topic = Topic.create(self, topic_id, label)
-        PersonalizedStreamsClient.post_topics(self, [topic])
-        
-        return topic
-
-
-    def delete_topic(self, topic):
-        return PersonalizedStreamsClient.patch_topics(self, [topic]) == 1
-
-
-    # Multiple Topic API
-    def get_topics(self, limit = 100, offset = 0):
-        return PersonalizedStreamsClient.get_topics(self, limit, offset)
-    
-    
-    def create_or_update_topics(self, topic_value_map):
-        topics = []
-        try:
-            topics = [Topic.create(self, k, v) for k, v in topic_value_map.iteritems()]
-        except:
-            topics = [Topic.create(self, k, v) for k, v in topic_value_map.items()]
-            
-        PersonalizedStreamsClient.post_topics(self, topics)
-            
-        return topics
-
-
-    def delete_topics(self, topics):
-        return PersonalizedStreamsClient.patch_topics(self, topics)
-    
-    
-    # Collection Topic API
-    def get_collection_topics(self, collection_id):
-        return PersonalizedStreamsClient.get_collection_topics(self, collection_id)
-    
-    
-    def add_collection_topics(self, collection_id, topics):
-        return PersonalizedStreamsClient.post_collection_topics(self, collection_id, topics)
-    
-    
-    def update_collection_topics(self, collection_id, topics):
-        return PersonalizedStreamsClient.put_collection_topics(self, collection_id, topics)
-    
-    
-    def remove_collection_topics(self, collection_id, topics):
-        return PersonalizedStreamsClient.patch_collection_topics(self, collection_id, topics)
-    
-    
-    # Timeline cursor
-    def get_topic_stream_cursor(self, topic, limit = 50, date = datetime.now()):
-        return CursorFactory.get_topic_stream_cursor(self, topic, limit, date)
-
-
     def get_network_name(self):
         return self.network.get_network_name()
     
