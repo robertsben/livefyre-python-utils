@@ -1,11 +1,7 @@
 import time
 import jwt, requests
 
-from datetime import datetime
 from livefyre.src.core.site import Site
-from livefyre.src.api.personalizedstreams import PersonalizedStreamsClient
-from livefyre.src.factory import CursorFactory
-from livefyre.src.entity import Topic
 
 
 class Network(object):

@@ -1,4 +1,4 @@
-import unittest
+import datetime, unittest
 
 import jwt
 from livefyre import Livefyre
@@ -10,6 +10,15 @@ class LivefyreTestCase(unittest.TestCase):
     
     def setUp(self):
         pass
+    
+#     def test_basic_site_api(self):
+#         site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
+#         
+#         name = 'PythonCreateCollection' + str(datetime.datetime.now())
+#         c_id = site.create_collection(name, name, 'http://answers.livefyre.com/PYTHON')
+#         retrieved_id = site.get_collection_id(name)
+#         
+#         self.assertEquals(c_id, retrieved_id, 'The two ids should be the same')
 
     def test_build_collection_token(self):
         site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)

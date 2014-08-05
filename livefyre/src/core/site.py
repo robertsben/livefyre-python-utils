@@ -1,11 +1,7 @@
 import base64, sys, hashlib
 import jwt, requests
 
-from datetime import datetime
 from livefyre.src.utils import is_valid_full_url
-from livefyre.src.api.personalizedstreams import PersonalizedStreamsClient
-from livefyre.src.entity import Topic
-from livefyre.src.factory import CursorFactory
 
 try:
     import simplejson as json
@@ -31,7 +27,7 @@ class Site(object):
             'url': url,
             'articleId': article_id
         }
-        
+
         if 'type' in options and options['type'] not in self.TYPE:
             raise AssertionError('type is not a recognized type. must be in {0}'.format(self.TYPE))
         
@@ -48,16 +44,16 @@ class Site(object):
         return hashlib.md5(meta_string).hexdigest()
     
     
-    def create_collection(self, title, article_id, url, tags='', s_type=None):
-        url = 'http://quill.{0}/api/v3.0/site/{1}/collection/create/'.format(self.network.name, self.s_id)
+    def create_collection(self, title, article_id, url, options={}):
+        uri = 'https://{0}.quill.fyre.co/api/v3.0/site/{1}/collection/create/'.format(self.get_network_name(), self.s_id)
         data = {
             'articleId': article_id,
-            'collectionMeta': self.build_collection_meta_token(title, article_id, url, tags, s_type),
-            'checksum': self.build_checksum(title, url, tags),
+            'collectionMeta': self.build_collection_meta_token(title, article_id, url, options),
+            'checksum': self.build_checksum(title, url, (options['tags'] if 'tags' in options else '')),
         }
-        headers = {'content-type': 'application/json'}
+        headers = {'Content-Type': 'application/json', 'Accepts': 'application/json'}
             
-        response = requests.post(url, params={'sync':1}, data=json.dumps(data), headers=headers)
+        response = requests.post(uri, params={'sync':1}, data=json.dumps(data), headers=headers)
         
         if response.status_code == 200:
             return response.json()['data']['collectionId']
