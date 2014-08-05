@@ -56,14 +56,15 @@ class LivefyreTestCase():#unittest.TestCase):
 
      
     def test_subscription_api(self):
+        user_token = self.network.build_user_auth_token(Config.USER_ID, Config.USER_ID + '@' + Config.NETWORK_NAME, self.network.DEFAULT_EXPIRES)
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStreamsClient.create_or_update_topics(self.network, topic_dict)
          
-        added = PersonalizedStreamsClient.add_subscriptions(self.network, Config.USER_ID, topics)
+        added = PersonalizedStreamsClient.add_subscriptions(self.network, user_token, topics)
         user_subs = PersonalizedStreamsClient.get_subscriptions(self.network, Config.USER_ID)
-        added, removed = PersonalizedStreamsClient.replace_subscriptions(self.network, Config.USER_ID, [topics[1]])
+        added, removed = PersonalizedStreamsClient.replace_subscriptions(self.network, user_token, [topics[1]])
         user_subs = PersonalizedStreamsClient.get_subscribers(self.network, topics[1])
-        removed = PersonalizedStreamsClient.remove_subscriptions(self.network, Config.USER_ID, [topics[1]])
+        removed = PersonalizedStreamsClient.remove_subscriptions(self.network, user_token, [topics[1]])
          
         PersonalizedStreamsClient.delete_topics(self.network, topics)
     
