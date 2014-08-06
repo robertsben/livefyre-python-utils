@@ -1,4 +1,4 @@
-from livefyre.src.api.personalizedstreams import PersonalizedStreamsClient
+from livefyre.src.api.personalizedstream import PersonalizedStream
 
 
 class TimelineCursor(object):
@@ -14,7 +14,7 @@ class TimelineCursor(object):
         if limit is None:
             limit = self.limit
         
-        data = PersonalizedStreamsClient.get_timeline_stream(self.core, self.resource, limit, None, self.cursor_time)
+        data = PersonalizedStream.get_timeline_stream(self.core, self.resource, limit, None, self.cursor_time)
         cursor = data['meta']['cursor']
         
         self.hasNext = cursor['hasNext']
@@ -27,7 +27,7 @@ class TimelineCursor(object):
         if limit is None:
             limit = self.limit
 
-        data = PersonalizedStreamsClient.get_timeline_stream(self.core, self.resource, limit, self.cursor_time, None)
+        data = PersonalizedStream.get_timeline_stream(self.core, self.resource, limit, self.cursor_time, None)
         cursor = data['meta']['cursor']
         
         self.hasPrevious = cursor['hasPrev']

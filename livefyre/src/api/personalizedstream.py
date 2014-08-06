@@ -10,10 +10,10 @@ except ImportError:
 
 
 def get_url(core):
-    return PersonalizedStreamsClient.BASE_URL.format(core.get_network_name())
+    return PersonalizedStream.BASE_URL.format(core.get_network_name())
 
 
-class PersonalizedStreamsClient(object):
+class PersonalizedStream(object):
     BASE_URL = 'https://{}.quill.fyre.co/api/v4'
     STREAM_BASE_URL = 'https://bootstrap.livefyre.com/api/v4'
     
@@ -27,7 +27,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def get_topic(core, topic_id):
-        url = get_url(core) + PersonalizedStreamsClient.TOPIC_PATH.format(Topic.generate_urn(core, topic_id))
+        url = get_url(core) + PersonalizedStream.TOPIC_PATH.format(Topic.generate_urn(core, topic_id))
         headers = get_lf_token_header(core)
 
         response = requests.get(url, headers = headers)
@@ -38,17 +38,17 @@ class PersonalizedStreamsClient(object):
 
     @staticmethod
     def create_or_update_topic(core, topic_id, label):
-        return PersonalizedStreamsClient.create_or_update_topics(core, { topic_id: label })[0]
+        return PersonalizedStream.create_or_update_topics(core, { topic_id: label })[0]
         
     
     @staticmethod
     def delete_topic(core, topic):
-        return PersonalizedStreamsClient.delete_topics(core, [topic]) == 1
+        return PersonalizedStream.delete_topics(core, [topic]) == 1
 
 
     @staticmethod
     def get_topics(core, limit = 100, offset = 0):
-        url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
+        url = get_url(core) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(core.get_urn())
         headers = get_lf_token_header(core)
 
         response = requests.get(url, params = {'limit': limit, 'offset': offset}, headers = headers)
@@ -68,7 +68,7 @@ class PersonalizedStreamsClient(object):
         for topic in topics:
             assert topic.label and len(topic.label) <= 128, 'topic label should not be empty and have 128 or less characters'
         
-        url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
+        url = get_url(core) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(core.get_urn())
         form = json.dumps({'topics': [x.to_dict() for x in topics]})
         headers = get_lf_token_header(core)
         headers['Content-Type'] = 'application/json'
@@ -81,7 +81,7 @@ class PersonalizedStreamsClient(object):
         
     @staticmethod
     def delete_topics(core, topics):
-        url = get_url(core) + PersonalizedStreamsClient.MULTIPLE_TOPIC_PATH.format(core.get_urn())
+        url = get_url(core) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(core.get_urn())
         form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(core)
         headers['Content-Type'] = 'application/json'
@@ -94,7 +94,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def get_collection_topics(site, collection_id):
-        url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         headers = get_lf_token_header(site)
 
         response = requests.get(url, headers = headers)
@@ -105,7 +105,7 @@ class PersonalizedStreamsClient(object):
 
     @staticmethod
     def add_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
@@ -118,7 +118,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def replace_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
@@ -134,7 +134,7 @@ class PersonalizedStreamsClient(object):
         
     @staticmethod
     def remove_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStreamsClient.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
         form = json.dumps({'delete': [x.topic_id for x in topics]})
         headers = get_lf_token_header(site)
         headers['Content-Type'] = 'application/json'
@@ -147,7 +147,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def get_subscriptions(network, user_id):
-        url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user_id))
+        url = get_url(network) + PersonalizedStream.USER_SUBSCRIPTION_PATH.format(network.get_user_urn(user_id))
         headers = get_lf_token_header(network)
 
         response = requests.get(url, headers = headers)
@@ -160,7 +160,7 @@ class PersonalizedStreamsClient(object):
     def add_subscriptions(network, user_token, topics):
         user_id = jwt.decode(user_token, network.key)['user_id']
         user_urn = network.get_user_urn(user_id)
-        url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(user_urn)
+        url = get_url(network) + PersonalizedStream.USER_SUBSCRIPTION_PATH.format(user_urn)
         form = json.dumps({'subscriptions': [Subscription(x.topic_id, user_urn, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user_token)
         headers['Content-Type'] = 'application/json'
@@ -175,7 +175,7 @@ class PersonalizedStreamsClient(object):
     def replace_subscriptions(network, user_token, topics):
         user_id = jwt.decode(user_token, network.key)['user_id']
         user_urn = network.get_user_urn(user_id)
-        url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(user_urn)
+        url = get_url(network) + PersonalizedStream.USER_SUBSCRIPTION_PATH.format(user_urn)
         form = json.dumps({'subscriptions': [Subscription(x.topic_id, user_urn, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user_token)
         headers['Content-Type'] = 'application/json'
@@ -193,7 +193,7 @@ class PersonalizedStreamsClient(object):
     def remove_subscriptions(network, user_token, topics):
         user_id = jwt.decode(user_token, network.key)['user_id']
         user_urn = network.get_user_urn(user_id)
-        url = get_url(network) + PersonalizedStreamsClient.USER_SUBSCRIPTION_PATH.format(user_urn)
+        url = get_url(network) + PersonalizedStream.USER_SUBSCRIPTION_PATH.format(user_urn)
         form = json.dumps({'delete': [Subscription(x.topic_id, user_urn, SubscriptionType.personalStream).to_dict() for x in topics]})
         headers = get_lf_token_header(network, user_token)
         headers['Content-Type'] = 'application/json'
@@ -206,7 +206,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def get_subscribers(network, topic, limit = 100, offset = 0):
-        url = get_url(network) + PersonalizedStreamsClient.TOPIC_SUBSCRIPTION_PATH.format(topic.topic_id)
+        url = get_url(network) + PersonalizedStream.TOPIC_SUBSCRIPTION_PATH.format(topic.topic_id)
         headers = get_lf_token_header(network)
 
         response = requests.get(url, params = {'limit': limit, 'offset': offset}, headers = headers)
@@ -218,7 +218,7 @@ class PersonalizedStreamsClient(object):
     
     @staticmethod
     def get_timeline_stream(core, resource, limit, until, since):
-        url = PersonalizedStreamsClient.STREAM_BASE_URL + PersonalizedStreamsClient.TIMELINE_PATH
+        url = PersonalizedStream.STREAM_BASE_URL + PersonalizedStream.TIMELINE_PATH
         headers = get_lf_token_header(core)
         params = {'resource': resource, 'limit': limit}
         if until is not None:
