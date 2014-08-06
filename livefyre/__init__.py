@@ -1,4 +1,5 @@
-from src.core import Network
+from src.core.network import Network
+
 
 class Livefyre(object):
     @staticmethod
