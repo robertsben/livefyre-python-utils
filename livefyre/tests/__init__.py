@@ -11,9 +11,6 @@ class LfTest:
     USER_ID = '<USER-ID>'
     ARTICLE_ID = '<ARTICLE-ID>'
     
-    def __init__(self):
-        self.set_prop_values(LfEnvironments.PROD)
-
     def set_prop_values(self, env):
         config = ConfigParser.RawConfigParser()
         config.read('test.properties')

@@ -1,7 +1,7 @@
 import unittest
 
 from livefyre import Livefyre
-from livefyre.tests import LfTest
+from livefyre.tests import LfTest, LfEnvironments
 from livefyre.src.entity import Topic
 from livefyre.src.api.personalizedstream import PersonalizedStream
 from livefyre.src.factory import CursorFactory
@@ -10,6 +10,7 @@ from livefyre.src.factory import CursorFactory
 class LivefyreTestCase():#unittest.TestCase):
     def setUp(self):
         self.test = LfTest()
+        self.test.set_prop_values(LfEnvironments.PROD)
         self.network = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY)
 #         self.network.ssl = False
         self.site = self.network.get_site(self.test.SITE_ID, self.test.SITE_KEY)
