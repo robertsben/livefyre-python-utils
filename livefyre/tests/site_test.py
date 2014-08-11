@@ -2,26 +2,26 @@ import datetime, unittest
 
 import jwt
 from livefyre import Livefyre
-from livefyre.tests import Config
+from livefyre.tests import LfTest
 
 
 class LivefyreTestCase(unittest.TestCase):
     CHECKSUM = '4464458a10c305693b5bf4d43a384be7'
     
     def setUp(self):
-        pass
+        self.test = LfTest()
     
 #     def test_basic_site_api(self):
-#         site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
-#         
+#         site = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY).get_site(self.test.SITE_ID, self.test.SITE_KEY)
+# #         site.network.ssl = False
 #         name = 'PythonCreateCollection' + str(datetime.datetime.now())
 #         c_id = site.create_collection(name, name, 'http://answers.livefyre.com/PYTHON')
 #         retrieved_id = site.get_collection_id(name)
-#         
+#          
 #         self.assertEquals(c_id, retrieved_id, 'The two ids should be the same')
 
     def test_build_collection_token(self):
-        site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
+        site = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY).get_site(self.test.SITE_ID, self.test.SITE_KEY)
         
         with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
             site.build_collection_meta_token('title', 'articleId', 'url.com')
@@ -37,13 +37,13 @@ class LivefyreTestCase(unittest.TestCase):
         self.assertIsNotNone(token)
         
         token = site.build_collection_meta_token('title', 'articleId', 'https://livefyre.com', {'tags': 'tags', 'type': 'reviews'})
-        self.assertEquals(jwt.decode(token, Config.SITE_KEY)['type'], 'reviews')
+        self.assertEquals(jwt.decode(token, self.test.SITE_KEY)['type'], 'reviews')
         
         token = site.build_collection_meta_token('title', 'articleId', 'https://livefyre.com', {'type': 'liveblog'})
-        self.assertEquals(jwt.decode(token, Config.SITE_KEY)['type'], 'liveblog')
+        self.assertEquals(jwt.decode(token, self.test.SITE_KEY)['type'], 'liveblog')
         
     def test_build_checksum(self):
-        site = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY).get_site(Config.SITE_ID, Config.SITE_KEY)
+        site = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY).get_site(self.test.SITE_ID, self.test.SITE_KEY)
         
         with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
             site.build_checksum('title', 'url', 'tags')

@@ -21,7 +21,7 @@ install_requires = ['PyJWT == 0.2.1', 'requests == 2.2.1', 'python-dateutil == 2
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.3.0',
+    version='1.3.1',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',

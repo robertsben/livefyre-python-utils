@@ -1,6 +1,6 @@
 import requests, jwt
 
-from livefyre.src.api import get_lf_token_header
+from livefyre.src.api import get_lf_token_header, Domain
 from livefyre.src.entity import Topic, Subscription, SubscriptionType
 
 try:
@@ -10,12 +10,12 @@ except ImportError:
 
 
 def get_url(core):
-    return PersonalizedStream.BASE_URL.format(core.get_network_name())
+    return PersonalizedStream.BASE_URL.format(Domain.quill(core))
 
 
 class PersonalizedStream(object):
-    BASE_URL = 'https://{}.quill.fyre.co/api/v4'
-    STREAM_BASE_URL = 'https://bootstrap.livefyre.com/api/v4'
+    BASE_URL = '{}/api/v4'
+    STREAM_BASE_URL = '{}/api/v4'
     
     TOPIC_PATH = '/{}/'
     MULTIPLE_TOPIC_PATH = '/{}:topics/';
@@ -218,7 +218,7 @@ class PersonalizedStream(object):
     
     @staticmethod
     def get_timeline_stream(core, resource, limit, until, since):
-        url = PersonalizedStream.STREAM_BASE_URL + PersonalizedStream.TIMELINE_PATH
+        url = PersonalizedStream.STREAM_BASE_URL.format(Domain.bootstrap(core)) + PersonalizedStream.TIMELINE_PATH
         headers = get_lf_token_header(core)
         params = {'resource': resource, 'limit': limit}
         if until is not None:

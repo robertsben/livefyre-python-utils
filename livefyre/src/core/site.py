@@ -2,6 +2,7 @@ import base64, sys, hashlib
 import jwt, requests
 
 from livefyre.src.utils import is_valid_full_url
+from livefyre.src.api import Domain
 
 try:
     import simplejson as json
@@ -45,7 +46,7 @@ class Site(object):
     
     
     def create_collection(self, title, article_id, url, options={}):
-        uri = 'https://{0}.quill.fyre.co/api/v3.0/site/{1}/collection/create/'.format(self.get_network_name(), self.s_id)
+        uri = '{0}/api/v3.0/site/{1}/collection/create/'.format(Domain.quill(self), self.s_id)
         data = {
             'articleId': article_id,
             'collectionMeta': self.build_collection_meta_token(title, article_id, url, options),
@@ -66,7 +67,7 @@ class Site(object):
         else:
             article_bytes = bytes(str(article_id))
         encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')
-        url = 'http://bootstrap.livefyre.com/bs3/{0}/{1}/{2}/init'.format(self.network.name, self.s_id, encoded_article_id)
+        url = '{0}/bs3/{1}/{2}/{3}/init'.format(Domain.bootstrap(self), self.network.name, self.s_id, encoded_article_id)
         
         response = requests.get(url=url)
         if response.status_code == 200:

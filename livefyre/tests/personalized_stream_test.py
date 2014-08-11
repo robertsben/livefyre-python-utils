@@ -1,7 +1,7 @@
 import unittest
 
 from livefyre import Livefyre
-from livefyre.tests import Config
+from livefyre.tests import LfTest
 from livefyre.src.entity import Topic
 from livefyre.src.api.personalizedstream import PersonalizedStream
 from livefyre.src.factory import CursorFactory
@@ -9,8 +9,10 @@ from livefyre.src.factory import CursorFactory
 
 class LivefyreTestCase():#unittest.TestCase):
     def setUp(self):
-        self.network = Livefyre.get_network(Config.NETWORK_NAME, Config.NETWORK_KEY)
-        self.site = self.network.get_site(Config.SITE_ID, Config.SITE_KEY)
+        self.test = LfTest()
+        self.network = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY)
+#         self.network.ssl = False
+        self.site = self.network.get_site(self.test.SITE_ID, self.test.SITE_KEY)
         
 
     def test_network_topic(self):
@@ -47,21 +49,21 @@ class LivefyreTestCase():#unittest.TestCase):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.site, topic_dict)
          
-        added = PersonalizedStream.add_collection_topics(self.site, Config.COLLECTION_ID, topics)
-        added, removed = PersonalizedStream.replace_collection_topics(self.site, Config.COLLECTION_ID, [topics[0]])
-        removed = PersonalizedStream.remove_collection_topics(self.site, Config.COLLECTION_ID, [topics[0]])
-        collection_topics = PersonalizedStream.get_collection_topics(self.site, Config.COLLECTION_ID)
+        added = PersonalizedStream.add_collection_topics(self.site, self.test.COLLECTION_ID, topics)
+        added, removed = PersonalizedStream.replace_collection_topics(self.site, self.test.COLLECTION_ID, [topics[0]])
+        removed = PersonalizedStream.remove_collection_topics(self.site, self.test.COLLECTION_ID, [topics[0]])
+        collection_topics = PersonalizedStream.get_collection_topics(self.site, self.test.COLLECTION_ID)
          
         PersonalizedStream.delete_topics(self.site, topics)
 
      
     def test_subscription_api(self):
-        user_token = self.network.build_user_auth_token(Config.USER_ID, Config.USER_ID + '@' + Config.NETWORK_NAME, self.network.DEFAULT_EXPIRES)
+        user_token = self.network.build_user_auth_token(self.test.USER_ID, self.test.USER_ID + '@' + self.test.NETWORK_NAME, self.network.DEFAULT_EXPIRES)
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.network, topic_dict)
          
         added = PersonalizedStream.add_subscriptions(self.network, user_token, topics)
-        user_subs = PersonalizedStream.get_subscriptions(self.network, Config.USER_ID)
+        user_subs = PersonalizedStream.get_subscriptions(self.network, self.test.USER_ID)
         added, removed = PersonalizedStream.replace_subscriptions(self.network, user_token, [topics[1]])
         user_subs = PersonalizedStream.get_subscribers(self.network, topics[1])
         removed = PersonalizedStream.remove_subscriptions(self.network, user_token, [topics[1]])
