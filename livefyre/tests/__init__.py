@@ -13,7 +13,7 @@ class LfTest:
     
     def set_prop_values(self, env):
         config = ConfigParser.RawConfigParser()
-        config.read('test.properties')
+        config.read('test.ini')
         
         self.NETWORK_NAME = config.get(env.value, 'NETWORK_NAME')
         self.NETWORK_KEY = config.get(env.value, 'NETWORK_KEY')

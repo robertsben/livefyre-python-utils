@@ -9,3 +9,5 @@ venv
 *.egg
 
 test.properties
+
+test.ini

@@ -2,6 +2,7 @@ import time
 import jwt, requests
 
 from livefyre.src.core.site import Site
+from livefyre.src.api import Domain
 
 
 class Network(object):
@@ -18,7 +19,7 @@ class Network(object):
     def set_user_sync_url(self, url_template):
         assert '{id}' in url_template, 'url_template should have {id}.'
         
-        url = 'http://{0!s}/'.format(self.name)
+        url = Domain.quill(self)+'/'
         data = {'actor_token' : self.build_livefyre_token(), 'pull_profile_url' : url_template}
         headers = {'Content-type': 'application/json'}
         
@@ -27,7 +28,7 @@ class Network(object):
         
         
     def sync_user(self, user_id):
-        url = 'http://{0!s}/api/v3_0/user/{1!s}/refresh'.format(self.name, user_id)
+        url = '{0}/api/v3_0/user/{1}/refresh'.format(Domain.quill(self), user_id)
         data = {'lftoken' : self.build_livefyre_token()}
         headers = {'Content-type': 'application/json'}
         
