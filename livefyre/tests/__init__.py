@@ -13,15 +13,18 @@ class LfTest:
     
     def set_prop_values(self, env):
         config = ConfigParser.RawConfigParser()
-        config.read('test.ini')
+        try:
+            config.read('test.ini')
         
-        self.NETWORK_NAME = config.get(env.value, 'NETWORK_NAME')
-        self.NETWORK_KEY = config.get(env.value, 'NETWORK_KEY')
-        self.SITE_ID = config.get(env.value, 'SITE_ID')
-        self.SITE_KEY = config.get(env.value, 'SITE_KEY')
-        self.COLLECTION_ID = config.get(env.value, 'COLLECTION_ID')
-        self.USER_ID = config.get(env.value, 'USER_ID')
-        self.ARTICLE_ID = config.get(env.value, 'ARTICLE_ID')
+            self.NETWORK_NAME = config.get(env.value, 'NETWORK_NAME')
+            self.NETWORK_KEY = config.get(env.value, 'NETWORK_KEY')
+            self.SITE_ID = config.get(env.value, 'SITE_ID')
+            self.SITE_KEY = config.get(env.value, 'SITE_KEY')
+            self.COLLECTION_ID = config.get(env.value, 'COLLECTION_ID')
+            self.USER_ID = config.get(env.value, 'USER_ID')
+            self.ARTICLE_ID = config.get(env.value, 'ARTICLE_ID')
+        except:
+            pass #uses defaults
         
             
 class LfEnvironments(Enum):
