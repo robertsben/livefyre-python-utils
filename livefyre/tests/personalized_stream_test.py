@@ -1,18 +1,16 @@
 import unittest
 
 from livefyre import Livefyre
-from livefyre.tests import LfTest, LfEnvironments
-from livefyre.src.entity import Topic
+from livefyre.tests import LfTest
+from livefyre.src.entity.topic import Topic
 from livefyre.src.api.personalizedstream import PersonalizedStream
-from livefyre.src.factory import CursorFactory
+from livefyre.src.factory.cursorfactory import CursorFactory
 
 
-class LivefyreTestCase():#unittest.TestCase):
+class LivefyreTestCase(unittest.TestCase):
     def setUp(self):
         self.test = LfTest()
-        self.test.set_prop_values(LfEnvironments.PROD)
         self.network = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY)
-#         self.network.ssl = False
         self.site = self.network.get_site(self.test.SITE_ID, self.test.SITE_KEY)
         
 
@@ -29,7 +27,7 @@ class LivefyreTestCase():#unittest.TestCase):
         deleted = PersonalizedStream.delete_topic(self.site, topic)
         topics = PersonalizedStream.get_topics(self.site)
      
-     
+    
     def test_network_topics(self):
         topics = {'1': 'UN', '2': 'DEUX'}
         returned_topics = PersonalizedStream.create_or_update_topics(self.network, topics)
@@ -49,12 +47,12 @@ class LivefyreTestCase():#unittest.TestCase):
     def test_collection_topics(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.site, topic_dict)
-         
+          
         added = PersonalizedStream.add_collection_topics(self.site, self.test.COLLECTION_ID, topics)
         added, removed = PersonalizedStream.replace_collection_topics(self.site, self.test.COLLECTION_ID, [topics[0]])
         removed = PersonalizedStream.remove_collection_topics(self.site, self.test.COLLECTION_ID, [topics[0]])
         collection_topics = PersonalizedStream.get_collection_topics(self.site, self.test.COLLECTION_ID)
-         
+          
         PersonalizedStream.delete_topics(self.site, topics)
 
      

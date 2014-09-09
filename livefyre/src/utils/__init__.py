@@ -18,7 +18,6 @@ def force_unicode(s, encoding='utf-8', errors='strict'):
     elif not isinstance(s, unicode):
         s = s.decode(encoding, errors)
     return s
-
     
     
 def match_url_regex(url):

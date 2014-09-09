@@ -2,7 +2,7 @@ import base64, sys, hashlib
 import jwt, requests
 
 from livefyre.src.utils import is_valid_full_url
-from livefyre.src.api import Domain
+from livefyre.src.api.domain import Domain
 
 try:
     import simplejson as json
@@ -85,10 +85,6 @@ class Site(object):
     def build_livefyre_token(self):
         return self.network.build_livefyre_token()
 
-
-    def get_network_name(self):
-        return self.network.get_network_name()
-    
 
     def get_urn(self):
         return self.network.get_urn() + ":site=" + self.s_id

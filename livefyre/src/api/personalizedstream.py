@@ -1,7 +1,8 @@
 import requests, jwt
 
-from livefyre.src.api import get_lf_token_header, Domain
-from livefyre.src.entity import Topic, Subscription, SubscriptionType
+from livefyre.src.api.domain import Domain
+from livefyre.src.entity.topic import Topic
+from livefyre.src.entity.subscription import Subscription, SubscriptionType
 
 try:
     import simplejson as json
@@ -12,6 +13,12 @@ except ImportError:
 def get_url(core):
     return PersonalizedStream.BASE_URL.format(Domain.quill(core))
 
+def get_lf_token_header(core, user_token = None):
+    return {
+            'Authorization': 'lftoken ' + (core.build_livefyre_token() if user_token is None else user_token),
+            'Accepts': 'application/json'
+    }
+
 
 class PersonalizedStream(object):
     BASE_URL = '{}/api/v4'
@@ -19,7 +26,6 @@ class PersonalizedStream(object):
     
     TOPIC_PATH = '/{}/'
     MULTIPLE_TOPIC_PATH = '/{}:topics/';
-    COLLECTION_TOPICS_PATH = '/{}:collection={}:topics/';
     USER_SUBSCRIPTION_PATH = '/{}:subscriptions/';
     TOPIC_SUBSCRIPTION_PATH = '/{}:subscribers/';
     TIMELINE_PATH = '/timeline/';
@@ -93,9 +99,9 @@ class PersonalizedStream(object):
     
     
     @staticmethod
-    def get_collection_topics(site, collection_id):
-        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
-        headers = get_lf_token_header(site)
+    def get_collection_topics(collection):
+        url = get_url(collection) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(collection.get_urn())
+        headers = get_lf_token_header(collection)
 
         response = requests.get(url, headers = headers)
         data = response.json()['data']
@@ -104,10 +110,10 @@ class PersonalizedStream(object):
 
 
     @staticmethod
-    def add_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+    def add_collection_topics(collection, topics):
+        url = get_url(collection) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(collection.get_urn())
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
-        headers = get_lf_token_header(site)
+        headers = get_lf_token_header(collection)
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
@@ -117,10 +123,10 @@ class PersonalizedStream(object):
     
     
     @staticmethod
-    def replace_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+    def replace_collection_topics(collection, topics):
+        url = get_url(collection) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(collection.get_urn())
         form = json.dumps({'topicIds': [x.topic_id for x in topics]})
-        headers = get_lf_token_header(site)
+        headers = get_lf_token_header(collection)
         headers['Content-Type'] = 'application/json'
         
         response = requests.put(url, data = form, headers = headers)
@@ -133,10 +139,10 @@ class PersonalizedStream(object):
         
         
     @staticmethod
-    def remove_collection_topics(site, collection_id, topics):
-        url = get_url(site) + PersonalizedStream.COLLECTION_TOPICS_PATH.format(site.get_urn(), collection_id)
+    def remove_collection_topics(collection, topics):
+        url = get_url(collection) + PersonalizedStream.MULTIPLE_TOPIC_PATH.format(collection.get_urn())
         form = json.dumps({'delete': [x.topic_id for x in topics]})
-        headers = get_lf_token_header(site)
+        headers = get_lf_token_header(collection)
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)

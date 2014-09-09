@@ -2,7 +2,7 @@ import time
 import jwt, requests
 
 from livefyre.src.core.site import Site
-from livefyre.src.api import Domain
+from livefyre.src.api.domain import Domain
 
 
 class Network(object):

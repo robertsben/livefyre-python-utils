@@ -1,13 +1,12 @@
 import unittest
 
 from livefyre import Livefyre
-from livefyre.tests import LfTest, LfEnvironments
+from livefyre.tests import LfTest
 
 
 class LivefyreTestCase(unittest.TestCase):
     def setUp(self):
         self.test = LfTest()
-        self.test.set_prop_values(LfEnvironments.PROD)
 
     def test_set_user_sync_url(self):
         network = Livefyre.get_network(self.test.NETWORK_NAME, self.test.NETWORK_KEY)
