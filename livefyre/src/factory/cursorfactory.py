@@ -8,6 +8,7 @@ class CursorFactory(object):
         resource = topic.topic_id + ":topicStream"
         return TimelineCursor(core, resource, limit, date)
     
+    
     @staticmethod
     def get_personal_stream_cursor(network, user, limit = 50, date = datetime.now()):
         resource = network.get_user_urn(user) +":personalStream"

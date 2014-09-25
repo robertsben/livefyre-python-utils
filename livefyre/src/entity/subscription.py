@@ -8,9 +8,11 @@ class Subscription(object):
         self.sub_type = sub_type
         self.created_at = created_at
         
+        
     @staticmethod
     def serialize_from_json(json):
         return Subscription(json['to'], json['by'], json['type'], json['createdAt'])
+    
     
     def to_dict(self):
         sub_dict = {

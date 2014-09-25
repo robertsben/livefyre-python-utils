@@ -10,6 +10,7 @@ class TimelineCursor(object):
         self.hasNext = False
         self.hasPrevious = False
         
+        
     def next(self, limit = None):
         if limit is None:
             limit = self.limit
@@ -23,6 +24,7 @@ class TimelineCursor(object):
 
         return data
         
+        
     def previous(self, limit = None):
         if limit is None:
             limit = self.limit
@@ -35,6 +37,7 @@ class TimelineCursor(object):
         self.cursor_time = cursor['prev']
 
         return data
+    
     
     def set_cursor_time(self, new_time):
         self.cursor_time = new_time.utcnow().isoformat() + 'Z'

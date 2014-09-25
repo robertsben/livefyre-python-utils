@@ -16,6 +16,7 @@ class Domain(object):
         network = get_network_from_core(core)
         return 'https://{0}.quill.fyre.co'.format(network.network_name) if network.ssl else 'http://quill.{0}'.format(network.name)
     
+    
     @staticmethod
     def bootstrap(core):
         network = get_network_from_core(core)
