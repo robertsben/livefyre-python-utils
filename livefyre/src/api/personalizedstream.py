@@ -21,13 +21,13 @@ def get_lf_token_header(core, user_token=None):
 
 
 class PersonalizedStream(object):
-    BASE_URL = '{}/api/v4'
-    STREAM_BASE_URL = '{}/api/v4'
+    BASE_URL = '{0}/api/v4'
+    STREAM_BASE_URL = '{0}/api/v4'
     
-    TOPIC_PATH = '/{}/'
-    MULTIPLE_TOPIC_PATH = '/{}:topics/';
-    USER_SUBSCRIPTION_PATH = '/{}:subscriptions/';
-    TOPIC_SUBSCRIPTION_PATH = '/{}:subscribers/';
+    TOPIC_PATH = '/{0}/'
+    MULTIPLE_TOPIC_PATH = '/{0}:topics/';
+    USER_SUBSCRIPTION_PATH = '/{0}:subscriptions/';
+    TOPIC_SUBSCRIPTION_PATH = '/{0}:subscribers/';
     TIMELINE_PATH = '/timeline/';
     
     @staticmethod

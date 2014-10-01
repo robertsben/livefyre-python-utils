@@ -13,7 +13,7 @@ def force_unicode(s, encoding='utf-8', errors='strict'):
             except UnicodeEncodeError:
                 if not isinstance(s, Exception):
                     raise
-                s = u" ".join([force_unicode(arg, encoding, errors) for arg in s])
+                s = unicode(' '.join([force_unicode(arg, encoding, errors) for arg in s]))
     elif not isinstance(s, unicode):
         s = s.decode(encoding, errors)
     return s

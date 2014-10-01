@@ -13,7 +13,7 @@ class DomainTestCase(LfTest, unittest.TestCase):
         self.collection = self.site.build_collection('TITLE', self.ARTICLE_ID, self.URL)
     
     def test_quill(self):
-        quill_domain_ssl = 'https://{}.quill.fyre.co'.format(self.network.get_network_name())
+        quill_domain_ssl = 'https://{0}.quill.fyre.co'.format(self.network.get_network_name())
         domain = Domain.quill(self.network)
         self.assertEquals(quill_domain_ssl, domain)
         domain = Domain.quill(self.site)
@@ -21,7 +21,7 @@ class DomainTestCase(LfTest, unittest.TestCase):
         domain = Domain.quill(self.collection)
         self.assertEquals(quill_domain_ssl, domain)
         
-        quill_domain = 'http://quill.{}'.format(self.network.name)
+        quill_domain = 'http://quill.{0}'.format(self.network.name)
         self.network.ssl = False
         domain = Domain.quill(self.network)
         self.assertEquals(quill_domain, domain)
@@ -31,7 +31,7 @@ class DomainTestCase(LfTest, unittest.TestCase):
         self.assertEquals(quill_domain, domain)
     
     def test_bootstrap(self):
-        bootstrap_domain_ssl = 'https://{}.bootstrap.fyre.co'.format(self.network.get_network_name())
+        bootstrap_domain_ssl = 'https://{0}.bootstrap.fyre.co'.format(self.network.get_network_name())
         domain = Domain.bootstrap(self.network)
         self.assertEquals(bootstrap_domain_ssl, domain)
         domain = Domain.bootstrap(self.site)
@@ -39,7 +39,7 @@ class DomainTestCase(LfTest, unittest.TestCase):
         domain = Domain.bootstrap(self.collection)
         self.assertEquals(bootstrap_domain_ssl, domain)
         
-        bootstrap_domain = 'http://bootstrap.{}'.format(self.network.name)
+        bootstrap_domain = 'http://bootstrap.{0}'.format(self.network.name)
         self.network.ssl = False
         domain = Domain.bootstrap(self.network)
         self.assertEquals(bootstrap_domain, domain)
