@@ -18,23 +18,23 @@ class SubscriptionTestCase(LfTest, unittest.TestCase):
     
     def test_init(self):
         sub = Subscription(self.TO, self.BY, self.TYPE, self.CREATED_AT)
-        self.assertEquals(self.TO, sub.to)
-        self.assertEquals(self.BY, sub.by)
-        self.assertEquals(self.TYPE, sub.sub_type)
-        self.assertEquals(self.CREATED_AT, sub.created_at)
+        self.assertEqual(self.TO, sub.to)
+        self.assertEqual(self.BY, sub.by)
+        self.assertEqual(self.TYPE, sub.sub_type)
+        self.assertEqual(self.CREATED_AT, sub.created_at)
         
     def test_func(self):
         sub = Subscription(self.TO, self.BY, self.TYPE, self.CREATED_AT)
-        self.assertEquals(self.DICT, sub.to_dict())
+        self.assertEqual(self.DICT, sub.to_dict())
         
         sub2 = Subscription.serialize_from_json(self.DICT)
-        self.assertEquals(self.TO, sub2.to)
-        self.assertEquals(self.BY, sub2.by)
-        self.assertEquals(self.TYPE, sub2.sub_type)
-        self.assertEquals(self.CREATED_AT, sub2.created_at)
+        self.assertEqual(self.TO, sub2.to)
+        self.assertEqual(self.BY, sub2.by)
+        self.assertEqual(self.TYPE, sub2.sub_type)
+        self.assertEqual(self.CREATED_AT, sub2.created_at)
         
         sub3 = json.dumps(sub2)
-        self.assertEquals(json.dumps(self.DICT), sub3)
+        self.assertEqual(json.dumps(self.DICT), sub3)
         
         
 if __name__ == '__main__':

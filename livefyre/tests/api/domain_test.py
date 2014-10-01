@@ -15,38 +15,38 @@ class DomainTestCase(LfTest, unittest.TestCase):
     def test_quill(self):
         quill_domain_ssl = 'https://{0}.quill.fyre.co'.format(self.network.get_network_name())
         domain = Domain.quill(self.network)
-        self.assertEquals(quill_domain_ssl, domain)
+        self.assertEqual(quill_domain_ssl, domain)
         domain = Domain.quill(self.site)
-        self.assertEquals(quill_domain_ssl, domain)
+        self.assertEqual(quill_domain_ssl, domain)
         domain = Domain.quill(self.collection)
-        self.assertEquals(quill_domain_ssl, domain)
+        self.assertEqual(quill_domain_ssl, domain)
         
         quill_domain = 'http://quill.{0}'.format(self.network.name)
         self.network.ssl = False
         domain = Domain.quill(self.network)
-        self.assertEquals(quill_domain, domain)
+        self.assertEqual(quill_domain, domain)
         domain = Domain.quill(self.site)
-        self.assertEquals(quill_domain, domain)
+        self.assertEqual(quill_domain, domain)
         domain = Domain.quill(self.collection)
-        self.assertEquals(quill_domain, domain)
+        self.assertEqual(quill_domain, domain)
     
     def test_bootstrap(self):
         bootstrap_domain_ssl = 'https://{0}.bootstrap.fyre.co'.format(self.network.get_network_name())
         domain = Domain.bootstrap(self.network)
-        self.assertEquals(bootstrap_domain_ssl, domain)
+        self.assertEqual(bootstrap_domain_ssl, domain)
         domain = Domain.bootstrap(self.site)
-        self.assertEquals(bootstrap_domain_ssl, domain)
+        self.assertEqual(bootstrap_domain_ssl, domain)
         domain = Domain.bootstrap(self.collection)
-        self.assertEquals(bootstrap_domain_ssl, domain)
+        self.assertEqual(bootstrap_domain_ssl, domain)
         
         bootstrap_domain = 'http://bootstrap.{0}'.format(self.network.name)
         self.network.ssl = False
         domain = Domain.bootstrap(self.network)
-        self.assertEquals(bootstrap_domain, domain)
+        self.assertEqual(bootstrap_domain, domain)
         domain = Domain.bootstrap(self.site)
-        self.assertEquals(bootstrap_domain, domain)
+        self.assertEqual(bootstrap_domain, domain)
         domain = Domain.bootstrap(self.collection)
-        self.assertEquals(bootstrap_domain, domain)
+        self.assertEqual(bootstrap_domain, domain)
      
         
 if __name__ == '__main__':

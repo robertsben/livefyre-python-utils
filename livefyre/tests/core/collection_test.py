@@ -20,22 +20,22 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         
         collection = self.site.build_collection(name, name, self.URL).create_or_update()
         other_id = collection.get_collection_content()['collectionSettings']['collectionId']
-        self.assertEquals(collection.get_collection_id(), other_id)
+        self.assertEqual(collection.get_collection_id(), other_id)
         
         collection.options = {'tags': 'super'}
         collection.create_or_update()
-        self.assertEquals('super', collection.options['tags'])
+        self.assertEqual('super', collection.options['tags'])
         
     def test_build_collection_token(self):
         collection = self.site.build_collection('title', 'articleId', 'https://livefyre.com', {'tags': 'tags', 'type': 'reviews'})
         token = collection.build_collection_meta_token()
          
-        self.assertIsNotNone(token)
-        self.assertEquals(jwt.decode(token, self.SITE_KEY)['type'], 'reviews')
+        self.assertTrue(token)
+        self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'reviews')
         
         collection = self.site.build_collection('title', 'articleId', 'https://livefyre.com', {'type': 'liveblog'})
         token = collection.build_collection_meta_token()
-        self.assertEquals(jwt.decode(token, self.SITE_KEY)['type'], 'liveblog')
+        self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'liveblog')
         
         topics = [Topic.create(self.network, '1', '1')]
         collection = self.site.build_collection(self.TITLE, self.ARTICLE_ID, self.URL, {'topics': topics})
@@ -43,16 +43,16 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         
         token = collection.build_collection_meta_token()
         
-        with self.assertRaisesRegexp(DecodeError, 'Signature verification failed'):
+        with self.assertRaises(DecodeError):
             jwt.decode(token, self.site.key)
         
         decoded_token = jwt.decode(token, self.network.key)
-        self.assertEquals(self.network.get_urn(), decoded_token['iss'])
+        self.assertEqual(self.network.get_urn(), decoded_token['iss'])
     
     def test_build_checksum(self):
         collection = self.site.build_collection('title', 'articleId', 'http://livefyre.com', {'tags': 'tags'})
         checksum = collection.build_checksum()
-        self.assertEquals(self.CHECKSUM, checksum, 'checksum is not correct.')
+        self.assertEqual(self.CHECKSUM, checksum, 'checksum is not correct.')
         
 
 if __name__ == '__main__':

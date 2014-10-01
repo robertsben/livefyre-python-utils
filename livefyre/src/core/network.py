@@ -1,8 +1,8 @@
-import time
-import jwt, requests
+import time, jwt, requests
 
 from livefyre.src.core.site import Site
 from livefyre.src.api.domain import Domain
+from livefyre.src.utils import pyver
 
 
 class Network(object):
@@ -39,12 +39,13 @@ class Network(object):
     def build_user_auth_token(self, user_id, display_name, expires):
         assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
 
-        return jwt.encode({
+        token = jwt.encode({
                 'domain': self.name,
                 'user_id': user_id,
                 'display_name': display_name,
                 'expires': int(time.time()) + expires},
             self.key)
+        return token.decode('utf-8') if pyver > 3.0 else token
     
     def validate_livefyre_token(self, lf_token):
         token_attr = jwt.decode(lf_token, self.key)

@@ -1,7 +1,7 @@
 import base64, sys, hashlib
 import jwt, requests
 
-from livefyre.src.utils import is_valid_full_url
+from livefyre.src.utils import is_valid_full_url, pyver
 from livefyre.src.api.domain import Domain
 from livefyre.src.exceptions import LivefyreException
 
@@ -59,7 +59,8 @@ class Collection(object):
         j = self.__get_json()
         j['iss'] = self.site.network.get_urn() if self.network_issued else self.site.get_urn()
         
-        return jwt.encode(j, self.site.network.key if self.network_issued else self.site.key)
+        token = jwt.encode(j, self.site.network.key if self.network_issued else self.site.key)
+        return token.decode('utf-8') if pyver > 3.0 else token
     
     def build_checksum(self):
         json_string = json.dumps(self.__get_json(), sort_keys=True, separators=(',',':'))

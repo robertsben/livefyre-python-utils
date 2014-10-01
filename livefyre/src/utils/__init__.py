@@ -1,5 +1,8 @@
 import re, urlparse, pickle
+import sys as _sys
     
+
+pyver = float('%s.%s' % _sys.version_info[:2])
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
     if isinstance(s, unicode):
@@ -42,7 +45,9 @@ def is_valid_full_url(value):
             netloc = netloc.encode('idna') # IDN -> ACE
         except UnicodeError: # invalid domain part
             raise
-        url = urlparse.urlunsplit((str(scheme), str(netloc), str(path), str(query), str(fragment)))
+        if pyver > 3.0:
+            netloc = netloc.decode('utf-8')
+        url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
         return match_url_regex(url)
     else:
         raise

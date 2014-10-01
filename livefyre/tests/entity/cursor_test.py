@@ -11,7 +11,7 @@ class TimelineCursorTestCase(LfTest, unittest.TestCase):
         cursor = CursorFactory.get_personal_stream_cursor(network, self.USER_ID)
         
         json = cursor.next()
-        self.assertIsNotNone(json)
+        self.assertTrue(json)
         
         
 if __name__ == '__main__':

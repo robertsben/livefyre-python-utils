@@ -1,5 +1,7 @@
 from enum import Enum
 from livefyre.src.exceptions import LivefyreException
+from livefyre.src.utils import pyver
+
 
 try:
     import simplejson as json
@@ -41,6 +43,9 @@ class Subscription(object):
     #json hack to get around jwt json dumps
     def _json_support(*args):
         def default(self, o):
+            if pyver > 3.0:
+                if isinstance(o, bytes):
+                    return
             return o.to_dict()
         json.JSONEncoder.default = default
     _json_support()

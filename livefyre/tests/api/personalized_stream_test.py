@@ -15,41 +15,41 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
     def test_network_topic(self):
         topic = PersonalizedStream.create_or_update_topic(self.network, '1', 'UN')
         t = PersonalizedStream.get_topic(self.network, 1)
-        self.assertIsNotNone(t)
-        self.assertEquals(t.label, topic.label)
+        self.assertTrue(t)
+        self.assertEqual(t.label, topic.label)
         
         self.assertTrue(PersonalizedStream.delete_topic(self.network, topic))
     
     def test_network_topics(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.network, topic_dict)
-        self.assertEquals(2, len(topics))
+        self.assertEqual(2, len(topics))
         
         returned_topics = PersonalizedStream.get_topics(self.network, 1, 0)
-        self.assertEquals(1, len(returned_topics))
+        self.assertEqual(1, len(returned_topics))
         
         deleted = PersonalizedStream.delete_topics(self.network, topics)
-        self.assertEquals(len(topics), deleted)
+        self.assertEqual(len(topics), deleted)
      
     def test_site_topic(self):
         topic = PersonalizedStream.create_or_update_topic(self.site, '2', 'DEUX')
         
         t = PersonalizedStream.get_topic(self.site, 2)
-        self.assertIsNotNone(t)
-        self.assertEquals(t.label, topic.label)
+        self.assertTrue(t)
+        self.assertEqual(t.label, topic.label)
         
         self.assertTrue(PersonalizedStream.delete_topic(self.site, topic))
      
     def test_site_topics(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.site, topic_dict)
-        self.assertEquals(2, len(topics))
+        self.assertEqual(2, len(topics))
         
         returned_topics = PersonalizedStream.get_topics(self.site, 1, 0)
-        self.assertEquals(1, len(returned_topics))
+        self.assertEqual(1, len(returned_topics))
         
         deleted = PersonalizedStream.delete_topics(self.site, topics)
-        self.assertEquals(len(topics), deleted)
+        self.assertEqual(len(topics), deleted)
       
     def test_collection_topics__network(self):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
@@ -61,13 +61,13 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         self.assertFalse(topic_ids)
             
         added = PersonalizedStream.add_collection_topics(collection, topics)
-        self.assertEquals(2, added)
+        self.assertEqual(2, added)
         
         added, removed = PersonalizedStream.replace_collection_topics(collection, [topics[0]])
         self.assertTrue(added > 0 or removed > 0)
         
         removed = PersonalizedStream.remove_collection_topics(collection, [topics[0]])
-        self.assertEquals(1, removed)
+        self.assertEqual(1, removed)
         
         collection_topics = PersonalizedStream.get_collection_topics(collection)
         self.assertFalse(collection_topics)
@@ -87,13 +87,13 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         self.assertFalse(topic_ids)
             
         added = PersonalizedStream.add_collection_topics(collection, topics)
-        self.assertEquals(2, added)
+        self.assertEqual(2, added)
         
         added, removed = PersonalizedStream.replace_collection_topics(collection, [topics[0]])
         self.assertTrue(added == 0 and removed == 1)
         
         removed = PersonalizedStream.remove_collection_topics(collection, [topics[0]])
-        self.assertEquals(1, removed)
+        self.assertEqual(1, removed)
         
         collection_topics = PersonalizedStream.get_collection_topics(collection)
         self.assertFalse(collection_topics)
@@ -121,10 +121,10 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         self.assertTrue(added == 0 and removed == 1)
         
         user_subs = PersonalizedStream.get_subscribers(self.network, topics[1])
-        self.assertEquals(1, len(user_subs))
+        self.assertEqual(1, len(user_subs))
         
         removed = PersonalizedStream.remove_subscriptions(self.network, user_token, [topics[1]])
-        self.assertEquals(1, removed)
+        self.assertEqual(1, removed)
         
         subs = PersonalizedStream.get_subscriptions(self.network, self.USER_ID)
         self.assertFalse(subs)
@@ -135,7 +135,7 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         topic = PersonalizedStream.create_or_update_topic(self.network, '1', 'UN')
         
         data = PersonalizedStream.get_timeline_stream(self.network, topic.topic_id +":topicStream")
-        self.assertIsNotNone(data)
+        self.assertTrue(data)
         
         PersonalizedStream.delete_topic(self.network, topic)
   
