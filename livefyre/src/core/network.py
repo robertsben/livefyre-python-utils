@@ -15,7 +15,6 @@ class Network(object):
         self.ssl = True
         self.network_name = name.split('.')[0]
     
-    
     def set_user_sync_url(self, url_template):
         assert '{id}' in url_template, 'url_template should have {id}.'
         
@@ -26,7 +25,6 @@ class Network(object):
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 204
         
-        
     def sync_user(self, user_id):
         url = '{0}/api/v3_0/user/{1}/refresh'.format(Domain.quill(self), user_id)
         data = {'lftoken' : self.build_livefyre_token()}
@@ -35,10 +33,8 @@ class Network(object):
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 200
     
-    
     def build_livefyre_token(self):
         return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)
-    
     
     def build_user_auth_token(self, user_id, display_name, expires):
         assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
@@ -50,25 +46,20 @@ class Network(object):
                 'expires': int(time.time()) + expires},
             self.key)
     
-    
     def validate_livefyre_token(self, lf_token):
         token_attr = jwt.decode(lf_token, self.key)
         return (token_attr['domain'] == self.name
             and token_attr['user_id'] == self.DEFAULT_USER
             and token_attr['expires'] >= int(time.time()))
         
-    
     def get_site(self, site_id, site_key):
         return Site(self, site_id, site_key)
-    
     
     def get_network_name(self):
         return self.network_name
     
-        
     def get_urn(self):
         return 'urn:livefyre:' + self.name
-    
     
     def get_user_urn(self, user):
         return self.get_urn() + ':user=' + user

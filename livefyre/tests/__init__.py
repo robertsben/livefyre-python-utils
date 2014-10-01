@@ -1,8 +1,12 @@
 from __future__ import print_function
 
-import ConfigParser, os, sys
+import ConfigParser, os, sys, pytest
+
 from enum import Enum
 
+
+unit = pytest.mark.NAME
+integration = pytest.mark.NAME
 
 class LfTest:
     NETWORK_NAME = '<NETWORK-NAME>'
@@ -12,8 +16,10 @@ class LfTest:
     COLLECTION_ID = '<COLLECTION-ID>'
     USER_ID = '<USER-ID>'
     ARTICLE_ID = '<ARTICLE-ID>'
+    TITLE = 'PythonTest'
+    URL = 'http://answers.livefyre.com/PYTHON'
     
-    def __init__(self):
+    def setUp(self):
         self.set_prop_values(LfEnvironments.PROD)
     
     def set_prop_values(self, env):

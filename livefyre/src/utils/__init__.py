@@ -1,6 +1,5 @@
-import re
-import urlparse
-
+import re, urlparse, pickle
+    
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
     if isinstance(s, unicode):

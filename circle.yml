@@ -1,0 +1,11 @@
+testing:
+  override:
+  - py.test
+
+machine:
+  timezone:
+    America/Los_Angeles
+  python:
+    version: 2.7.8
+  services:
+    - elasticsearch

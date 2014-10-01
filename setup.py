@@ -16,12 +16,12 @@ try:
 except IOError:
     readme = ''
 
-install_requires = ['PyJWT == 0.2.1', 'requests == 2.2.1', 'python-dateutil == 2.2', 'enum34 == 1.0']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0', 'pytest == 2.6.3']
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.3.2',
+    version='2.0.0',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
