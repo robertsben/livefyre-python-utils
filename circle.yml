@@ -1,16 +1,14 @@
 test:
   override:
   #ver. 2.6.8
-  - python setup.py test
+  # - python setup.py test
   - deactivate
   #ver. 2.7.8
-  - pyenv virtualenv 2.6.8 venv26
-  - pyenv activate venv26
-  # - virtualenv -p ~/.pyenv/versions/2.6.8/ venv26
-  # - source venv26/bin/activate
+  - virtualenv -p ~/.pyenv/versions/2.6.8/python2.6 venv26
+  - source venv26/bin/activate
   - python setup.py install
   - python setup.py test
-  - pyenv deactivate
+  - deactivate
   # #ver. 3.2.5
   # - pyenv install 3.2.5
   # - pyenv rehash
