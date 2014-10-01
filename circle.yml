@@ -5,20 +5,18 @@ test:
   - deactivate
   #ver. 2.7.8
   - pyenv global 2.7.8
-  - pyenv versions
-  - pyenv rehash
   - virtualenv venv27 --distribute
   - source venv27/bin/activate
-  # - python setup.py install
-  # - python setup.py test
+  - python setup.py install
+  - python setup.py test
   - deactivate
   # #ver. 3.2.5
-  # - pyenv local 3.2.5
-  # - virtualenv venv32 --distribute
-  # - source venv32/bin/activate
-  # - python setup.py install
-  # - python setup.py test
-  # - deactivate
+  - pyenv global 3.2.5
+  - virtualenv venv32 --distribute
+  - source venv32/bin/activate
+  - python setup.py install
+  - python setup.py test
+  - deactivate
   # #ver. 3.3.3
   # - pyenv local 3.3.3
   # - virtualenv venv33 --distribute
