@@ -9,8 +9,9 @@ class TimelineCursor(object):
         self.cursor_time = date.utcnow().isoformat() + 'Z'
         self.hasNext = False
         self.hasPrevious = False
-        
-    def next(self, limit=None):
+    
+    #slight deviation as python3.0+ gets confused by next()
+    def next_items(self, limit=None):
         if limit is None:
             limit = self.limit
         
@@ -23,7 +24,7 @@ class TimelineCursor(object):
 
         return data
         
-    def previous(self, limit=None):
+    def previous_items(self, limit=None):
         if limit is None:
             limit = self.limit
 

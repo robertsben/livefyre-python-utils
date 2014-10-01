@@ -1,5 +1,10 @@
-import re, urlparse, pickle
+import re, pickle
 import sys as _sys
+
+try:
+    import urlparse
+except ImportError:
+    from urllib.parse import urlparse
     
 
 pyver = float('%s.%s' % _sys.version_info[:2])

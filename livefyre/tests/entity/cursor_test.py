@@ -10,7 +10,7 @@ class TimelineCursorTestCase(LfTest, unittest.TestCase):
         network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         cursor = CursorFactory.get_personal_stream_cursor(network, self.USER_ID)
         
-        json = cursor.next()
+        json = cursor.next_items()
         self.assertTrue(json)
         
         

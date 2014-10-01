@@ -1,4 +1,4 @@
-import base64, sys, hashlib
+import base64, hashlib
 import jwt, requests
 
 from livefyre.src.utils import is_valid_full_url, pyver
@@ -67,8 +67,8 @@ class Collection(object):
         return hashlib.md5(json_string.encode('utf-8')).hexdigest()
     
     def get_collection_content(self):
-        if sys.version_info >= (3, 0):
-            article_bytes = bytes(str(self.article_id), 'utf-8')
+        if pyver >= 3.0:
+            article_bytes = str(self.article_id).encode('utf-8')
         else:
             article_bytes = bytes(str(self.article_id))
         encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')

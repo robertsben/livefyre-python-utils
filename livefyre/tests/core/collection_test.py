@@ -4,6 +4,7 @@ from jwt import DecodeError
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.entity.topic import Topic
+from livefyre.src.utils import pyver
 
 
 class CollectionTestCase(LfTest, unittest.TestCase):
@@ -43,8 +44,12 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         
         token = collection.build_collection_meta_token()
         
-        with self.assertRaises(DecodeError):
-            jwt.decode(token, self.site.key)
+        if pyver < 3.0:
+            with self.assertRaisesRegexp(DecodeError, 'Signature verification failed'):
+                jwt.decode(token, self.site.key)
+        else:
+            with self.assertRaisesRegex(DecodeError, 'Signature verification failed'):
+                jwt.decode(token, self.site.key)
         
         decoded_token = jwt.decode(token, self.network.key)
         self.assertEqual(self.network.get_urn(), decoded_token['iss'])
