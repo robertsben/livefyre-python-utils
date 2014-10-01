@@ -12,8 +12,8 @@ test:
   - deactivate
   # #ver. 3.2.5
   - pyenv global 3.2.5
-  - pyenv list
-  - ls ~/.pyenv/versions/3.2.5/
+  - pyenv versions
+  - ls ~/.pyenv/versions/3.2.5/bin/
   - virtualenv venv32 --distribute
   - source venv32/bin/activate
   # - python setup.py install
