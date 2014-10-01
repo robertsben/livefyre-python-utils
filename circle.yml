@@ -12,10 +12,11 @@ test:
   - deactivate
   # #ver. 3.2.5
   - pyenv global 3.2.5
+  - pyenv which 3.2.5
   - virtualenv venv32 --distribute
   - source venv32/bin/activate
-  - python setup.py install
-  - python setup.py test
+  # - python setup.py install
+  # - python setup.py test
   - deactivate
   # #ver. 3.3.3
   # - pyenv local 3.3.3
@@ -34,5 +35,3 @@ test:
 machine:
   timezone:
     America/Los_Angeles
-  python:
-    version: 2.7.8
