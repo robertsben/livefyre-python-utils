@@ -1,49 +1,43 @@
 test:
   override:
   #ver. 2.6.8
-  # - python setup.py test
+  - py.test -m unit
+  - py.test -m integration
   - deactivate
   #ver. 2.7.8
-  - pyenv versions
-  - pyenv local 2.6.8
+  - pyenv local 2.7.8
   - virtualenv venv26 --distribute
   - source venv26/bin/activate
-  # - python setup.py install
-  # - py.test -m unit
-  # - py.test -m integration
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
   - deactivate
-  - pyenv virtualenvs
   #ver. 3.2.5
-  # - pyenv local 3.2.5
-  # - pyenv rehash
-  # - virtualenv venv32 --distribute
-  # - source venv32/bin/activate
-  # - python setup.py install
-  # - py.test -m unit
-  # - py.test -m integration
-  # - deactivate
-  # - pyenv uninstall 3.2.5
-  # #ver. 3.3.3
-  # - pyenv install 3.3.3
-  # - pyenv rehash
-  # - virtualenv venv33 --distribute
-  # - source venv33/bin/activate
-  # - python setup.py install
-  # - py.test -m unit
-  # - py.test -m integration
-  # - deactivate
-  # - pyenv uninstall 3.3.3
-  # #ver. 3.4.1
-  # - pyenv install 3.4.1
-  # - pyenv rehash
-  # - virtualenv venv34 --distribute
-  # - source venv34/bin/activate
-  # - python setup.py install
-  # - py.test -m unit
-  # - py.test -m integration
+  - pyenv local 3.2.5
+  - virtualenv venv32 --distribute
+  - source venv32/bin/activate
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
+  - deactivate
+  #ver. 3.3.3
+  - pyenv local 3.3.3
+  - virtualenv venv33 --distribute
+  - source venv33/bin/activate
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
+  - deactivate
+  #ver. 3.4.1
+  - pyenv local 3.4.1
+  - virtualenv venv34 --distribute
+  - source venv34/bin/activate
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
 
 machine:
   timezone:
     America/Los_Angeles
   python:
-    version: 2.7.8
+    version: 2.6.8
