@@ -11,13 +11,10 @@ test:
   # - python setup.py test
   - deactivate
   # #ver. 3.2.5
-  - pyenv global 3.2.5
-  - pyenv versions
-  - ls ~/.pyenv/versions/3.2.5/bin/
-  - virtualenv venv32 --distribute
+  - virtualenv -p ~/.pyenv/versions/3.2.5/bin/python3.2 venv32 --distribute
   - source venv32/bin/activate
-  # - python setup.py install
-  # - python setup.py test
+  - python setup.py install
+  - python setup.py test
   - deactivate
   # #ver. 3.3.3
   # - pyenv local 3.3.3
