@@ -1,11 +1,10 @@
-import unittest, pytest
+import unittest
 
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 
 
 class SiteTestCase(LfTest, unittest.TestCase):
-    @pytest.mark.unit
     def test_build_collection(self):
         site = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)
         with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):

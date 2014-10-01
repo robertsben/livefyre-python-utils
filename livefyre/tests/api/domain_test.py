@@ -1,18 +1,16 @@
-import unittest, pytest
+import unittest
 
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.api.domain import Domain
 
 
-@pytest.mark.unit
 class DomainTestCase(LfTest, unittest.TestCase):
     def setUp(self):
         super(DomainTestCase, self).setUp()
         self.network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         self.site = self.network.get_site(self.SITE_ID, self.SITE_KEY)
         self.collection = self.site.build_collection('TITLE', self.ARTICLE_ID, self.URL)
-    
     
     def test_quill(self):
         quill_domain_ssl = 'https://{}.quill.fyre.co'.format(self.network.get_network_name())

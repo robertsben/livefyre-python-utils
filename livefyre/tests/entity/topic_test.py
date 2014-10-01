@@ -1,4 +1,4 @@
-import unittest, pytest
+import unittest
 
 from livefyre.tests import LfTest
 from livefyre.src.entity.topic import Topic
@@ -9,7 +9,6 @@ except ImportError:
     import json
 
 
-@pytest.mark.unit
 class TopicTestCase(LfTest, unittest.TestCase):
     ID = 'id'
     LABEL = 'label'

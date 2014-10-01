@@ -16,7 +16,7 @@ try:
 except IOError:
     readme = ''
 
-install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0', 'pytest == 2.6.3']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0']
 
 setup(
     name='livefyre',
@@ -43,6 +43,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ])
