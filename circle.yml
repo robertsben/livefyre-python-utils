@@ -4,11 +4,13 @@ test:
   - python setup.py test
   - deactivate
   #ver. 2.7.8
-  - virtualenv -p ~/.pyenv/versions/2.7.8/ venv27 --distribute
-  - source venv27/bin/activate
+  - pyenv virtualenv 2.6.8 venv26
+  - pyenv activate venv26
+  # - virtualenv -p ~/.pyenv/versions/2.6.8/ venv26
+  # - source venv26/bin/activate
   - python setup.py install
   - python setup.py test
-  - deactivate
+  - pyenv deactivate
   # #ver. 3.2.5
   # - pyenv install 3.2.5
   # - pyenv rehash
@@ -42,4 +44,4 @@ machine:
   timezone:
     America/Los_Angeles
   python:
-    version: 2.6.8
+    version: 2.7.8
