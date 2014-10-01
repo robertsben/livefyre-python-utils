@@ -1,4 +1,4 @@
-import unittest, pytest
+import unittest
 
 from livefyre.tests import LfTest
 from livefyre.src.entity.subscription import Subscription, SubscriptionType
@@ -9,7 +9,6 @@ except ImportError:
     import json
 
 
-@pytest.mark.unit
 class SubscriptionTestCase(LfTest, unittest.TestCase):
     TO = 'to'
     BY = 'by'
