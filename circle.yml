@@ -12,9 +12,6 @@ test:
   # #ver. 3.3.3
   - virtualenv -p ~/.pyenv/versions/3.3.3/bin/python3.3 venv33 --distribute
   - source venv33/bin/activate && python setup.py install && python setup.py test
-  # #ver. 3.4.1
-  - virtualenv -p ~/.pyenv/versions/3.4.1/bin/python3.4 venv34 --distribute
-  - source venv34/bin/activate && python setup.py install && python setup.py test
 
 machine:
   timezone:
