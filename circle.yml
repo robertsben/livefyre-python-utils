@@ -1,11 +1,34 @@
-testing:
+test:
   override:
-  - py.test
+  - py.test -m unit
+  - py.test -m integration
+  - pyenv uninstall 2.6.8
+  - pyenv install 2.7.8
+  - pyenv rehash
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
+  - pyenv uninstall 2.7.8
+  - pyenv install 3.2.5
+  - pyenv rehash
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
+  - pyenv uninstall 3.2.5
+  - pyenv install 3.3.3
+  - pyenv rehash
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
+  - pyenv uninstall 3.3.3
+  - pyenv install 3.4.1
+  - pyenv rehash
+  - python setup.py install
+  - py.test -m unit
+  - py.test -m integration
 
 machine:
   timezone:
     America/Los_Angeles
   python:
-    version: 2.7.8
-  services:
-    - elasticsearch
+    version: 2.6.8

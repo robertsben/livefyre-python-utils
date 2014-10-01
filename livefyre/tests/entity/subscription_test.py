@@ -1,29 +1,41 @@
 import unittest, pytest
 
-from livefyre import Livefyre
 from livefyre.tests import LfTest
+from livefyre.src.entity.subscription import Subscription, SubscriptionType
+
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 
 @pytest.mark.unit
 class SubscriptionTestCase(LfTest, unittest.TestCase):
-    def test_set_user_sync_url(self):
-        network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
-        with self.assertRaisesRegexp(AssertionError, 'url_template should have {id}.'):
-            network.set_user_sync_url('http://thisisa.test.url/')
-            
-        self.assertTrue(network.set_user_sync_url('http://answers.livefyre.com/{id}'))
-        self.assertTrue(network.sync_user('user'))
+    TO = 'to'
+    BY = 'by'
+    TYPE = SubscriptionType.personalStream
+    CREATED_AT = 10
+    DICT = {'to': TO, 'by': BY, 'type': TYPE.name, 'createdAt': CREATED_AT}
+    
+    def test_init(self):
+        sub = Subscription(self.TO, self.BY, self.TYPE, self.CREATED_AT)
+        self.assertEquals(self.TO, sub.to)
+        self.assertEquals(self.BY, sub.by)
+        self.assertEquals(self.TYPE, sub.sub_type)
+        self.assertEquals(self.CREATED_AT, sub.created_at)
         
-    def test_build_validate_user_token(self):
-        network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
+    def test_func(self):
+        sub = Subscription(self.TO, self.BY, self.TYPE, self.CREATED_AT)
+        self.assertEquals(self.DICT, sub.to_dict())
         
-        with self.assertRaisesRegexp(AssertionError, 'user_id should only contain alphanumeric characters'):
-            network.build_user_auth_token('system@blah', 'testName', 86400.0)
+        sub2 = Subscription.serialize_from_json(self.DICT)
+        self.assertEquals(self.TO, sub2.to)
+        self.assertEquals(self.BY, sub2.by)
+        self.assertEquals(self.TYPE, sub2.sub_type)
+        self.assertEquals(self.CREATED_AT, sub2.created_at)
         
-        token = network.build_livefyre_token()
-        
-        self.assertIsNotNone(token)
-        self.assertTrue(network.validate_livefyre_token(token))
+        sub3 = json.dumps(sub2)
+        self.assertEquals(json.dumps(self.DICT), sub3)
         
         
 if __name__ == '__main__':

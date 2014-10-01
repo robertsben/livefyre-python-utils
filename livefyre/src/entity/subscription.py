@@ -1,4 +1,5 @@
 from enum import Enum
+from livefyre.src.exceptions import LivefyreException
 
 try:
     import simplejson as json
@@ -16,7 +17,15 @@ class Subscription(object):
         
     @staticmethod
     def serialize_from_json(json_obj):
-        return Subscription(json_obj['to'], json_obj['by'], json_obj['type'], json_obj['createdAt'])
+        try:
+            try:
+                sub_type = SubscriptionType(json_obj['type'])
+            except ValueError:
+                sub_type = SubscriptionType[json_obj['type']]
+        except Exception:
+            raise LivefyreException('A valid type was not passed in.')
+        
+        return Subscription(json_obj['to'], json_obj['by'], sub_type, json_obj['createdAt'])
     
     def to_dict(self):
         sub_dict = {
