@@ -42,7 +42,7 @@ def is_valid_full_url(value):
             netloc = netloc.encode('idna') # IDN -> ACE
         except UnicodeError: # invalid domain part
             raise
-        url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
+        url = urlparse.urlunsplit((str(scheme), str(netloc), str(path), str(query), str(fragment)))
         return match_url_regex(url)
     else:
         raise

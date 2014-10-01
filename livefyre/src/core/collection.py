@@ -63,7 +63,7 @@ class Collection(object):
     
     def build_checksum(self):
         json_string = json.dumps(self.__get_json(), sort_keys=True, separators=(',',':'))
-        return hashlib.md5(json_string).hexdigest()
+        return hashlib.md5(json_string.encode('utf-8')).hexdigest()
     
     def get_collection_content(self):
         if sys.version_info >= (3, 0):
