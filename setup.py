@@ -33,6 +33,7 @@ setup(
     install_requires=install_requires,
     test_suite='livefyre.tests',
     use_2to3=True,
+    zip_safe=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
