@@ -3,13 +3,9 @@
 build
 dist
 livefyre.egg-info
-venv
+venv*
 *.pyc
-
 *.egg
-
 test.properties
-
 test.ini
-
 .settings/org.eclipse.core.resources.prefs
