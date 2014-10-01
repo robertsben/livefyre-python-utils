@@ -1,13 +1,13 @@
 test:
   override:
   #ver. 2.6.8
-  - python setup.py test
-  - deactivate
+  # - python setup.py test
+  # - deactivate
   #ver. 2.7.8
-  - pyenv global 2.7.8
-  - virtualenv venv27 --distribute
-  - source venv27/bin/activate
-  - python setup.py install
+  # - pyenv global 2.7.8
+  # - virtualenv venv27 --distribute
+  # - source venv27/bin/activate
+  # - python setup.py install
   - python setup.py test
   - deactivate
   # #ver. 3.2.5
@@ -35,4 +35,4 @@ machine:
   timezone:
     America/Los_Angeles
   python:
-    version: 2.6.8
+    version: 2.7.8
