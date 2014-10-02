@@ -10,7 +10,7 @@ except ImportError:
 pyver = float('%s.%s' % _sys.version_info[:2])
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
-    if isinstance(s, unicode):
+    if (pyver < 3.0 and isinstance(s, unicode)) or (pyver >= 3.0 and isinstance(s, str)):
         return s
     if not isinstance(s, basestring,):
         if hasattr(s, '__unicode__'):
