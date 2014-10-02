@@ -1,3 +1,6 @@
+dependencies:
+  override:
+
 test:
   pre:
   #INSTALL AND SETUP
