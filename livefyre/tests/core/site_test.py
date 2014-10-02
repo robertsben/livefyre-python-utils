@@ -28,7 +28,7 @@ class SiteTestCase(LfTest, unittest.TestCase):
                 site.build_collection('title', 'articleId', 'http://livefyre.com', {'tags': 'tags', 'type': 'bad type'})
 
         collection = site.build_collection(self.TITLE, self.ARTICLE_ID, self.URL)
-        self.assertIsNotNone(collection)
+        self.assertTrue(collection)
 
 
 if __name__ == '__main__':

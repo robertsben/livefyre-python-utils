@@ -21,7 +21,9 @@ def force_unicode(s, encoding='utf-8', errors='strict'):
             except UnicodeEncodeError:
                 if not isinstance(s, Exception):
                     raise
-                s = unicode(' '.join([force_unicode(arg, encoding, errors) for arg in s]))
+                s = ' '.join([force_unicode(arg, encoding, errors) for arg in s])
+                if pyver < 3.0:
+                    s = unicode(s)
     elif not isinstance(s, unicode):
         s = s.decode(encoding, errors)
     return s
