@@ -2,10 +2,10 @@ import re, pickle
 import sys as _sys
 
 try:
-    import urlparse.urlsplit as urlsplit
+    import urlparse
 except ImportError:
-    from urllib.parse import urlsplit
-    
+    import urllib.parse as urlparse
+
 
 pyver = float('%s.%s' % _sys.version_info[:2])
 
@@ -53,14 +53,14 @@ def is_valid_full_url(value):
     
     if value:
         value = force_unicode(value)
-        scheme, netloc, path, query, fragment = urlsplit(value)
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(value)
         try:
             netloc = netloc.encode('idna') # IDN -> ACE
         except UnicodeError: # invalid domain part
             raise
         if pyver > 3.0:
             netloc = netloc.decode('utf-8')
-        url = urlunsplit((scheme, netloc, path, query, fragment))
+        url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
         return match_url_regex(url)
     else:
         raise
