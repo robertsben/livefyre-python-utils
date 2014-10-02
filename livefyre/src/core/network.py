@@ -3,6 +3,7 @@ import time, jwt, requests
 from livefyre.src.core.site import Site
 from livefyre.src.api.domain import Domain
 from livefyre.src.utils import pyver
+from livefyre.src.exceptions import LivefyreException
 
 
 class Network(object):
@@ -22,16 +23,19 @@ class Network(object):
         data = {'actor_token' : self.build_livefyre_token(), 'pull_profile_url' : url_template}
         headers = {'Content-type': 'application/json'}
         
-        request = requests.post(url=url, data=data, headers=headers)
-        return request.status_code is 204
+        response = requests.post(url=url, data=data, headers=headers)
+        if response.status_code is not 204:
+            raise LivefyreException('Error contacting Livefyre. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
         
     def sync_user(self, user_id):
         url = '{0}/api/v3_0/user/{1}/refresh'.format(Domain.quill(self), user_id)
         data = {'lftoken' : self.build_livefyre_token()}
         headers = {'Content-type': 'application/json'}
         
-        request = requests.post(url=url, data=data, headers=headers)
-        return request.status_code is 200
+        response = requests.post(url=url, data=data, headers=headers)
+        if response.status_code is not 200:
+            raise LivefyreException('Error contacting Livefyre. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
+        return self
     
     def build_livefyre_token(self):
         return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)

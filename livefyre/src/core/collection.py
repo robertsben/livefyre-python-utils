@@ -52,8 +52,8 @@ class Collection(object):
             response = self.__invoke_collection_api('update')
             if response.status_code == 200:
                 return self
-            raise LivefyreException('Error updating Livefyre collection. Status code: ' + str(response.status_code))
-        raise LivefyreException('Error creating Livefyre collection. Status code: ' + str(response.status_code))
+            raise LivefyreException('Error updating Livefyre collection. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
+        raise LivefyreException('Error creating Livefyre collection. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
 
     def build_collection_meta_token(self):
         j = self.__get_json()
@@ -77,7 +77,7 @@ class Collection(object):
         response = requests.get(url=url)
         if response.status_code == 200:
             return response.json()
-        raise LivefyreException('Error contacting Livefyre. Status code: ' + str(response.status_code))
+        raise LivefyreException('Error contacting Livefyre. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
 
     def build_livefyre_token(self):
         return self.site.build_livefyre_token()

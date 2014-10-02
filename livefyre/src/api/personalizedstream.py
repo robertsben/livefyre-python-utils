@@ -3,6 +3,7 @@ import requests, jwt
 from livefyre.src.api.domain import Domain
 from livefyre.src.entity.topic import Topic
 from livefyre.src.entity.subscription import Subscription, SubscriptionType
+from livefyre.src.exceptions import LivefyreException
 
 try:
     import simplejson as json
@@ -18,8 +19,15 @@ def get_lf_token_header(core, user_token=None):
             'Authorization': 'lftoken ' + (core.build_livefyre_token() if user_token is None else user_token),
             'Accepts': 'application/json'
     }
+    
+def evaluate_response(response):
+    if response.status_code is 500:
+        raise LivefyreException('Livefyre appears to be down. Please see status.livefyre.com or contact us for more information')
+    if response.status_code >= 400:
+        raise LivefyreException('Please check the contents of your request. Here is the response from our servers: ' + str(response.content))
+    return response.json()
 
-
+    
 class PersonalizedStream(object):
     BASE_URL = '{0}/api/v4'
     STREAM_BASE_URL = '{0}/api/v4'
@@ -36,7 +44,7 @@ class PersonalizedStream(object):
         headers = get_lf_token_header(core)
 
         response = requests.get(url, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return Topic.serialize_from_json(data['topic']) if 'topic' in data else None
 
@@ -54,7 +62,7 @@ class PersonalizedStream(object):
         headers = get_lf_token_header(core)
 
         response = requests.get(url, params = {'limit': limit, 'offset': offset}, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
 
         return [Topic.serialize_from_json(x) for x in data['topics']] if 'topics' in data else []
 
@@ -75,7 +83,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
-        response.json()['data']
+        evaluate_response(response)['data']
         
         return topics
         
@@ -87,7 +95,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return data['deleted'] if 'deleted' in data else 0
     
@@ -97,7 +105,7 @@ class PersonalizedStream(object):
         headers = get_lf_token_header(collection)
 
         response = requests.get(url, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return data['topicIds'] if 'topicIds' in data else []
 
@@ -109,7 +117,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return data['added'] if 'added' in data else 0
     
@@ -121,7 +129,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.put(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         added = data['added'] if 'added' in data else 0
         removed = data['removed'] if 'removed' in data else 0
@@ -136,7 +144,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return data['removed'] if 'removed' in data else 0
     
@@ -146,7 +154,7 @@ class PersonalizedStream(object):
         headers = get_lf_token_header(network)
 
         response = requests.get(url, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return [Subscription.serialize_from_json(x) for x in data['subscriptions']] if 'subscriptions' in data else []
 
@@ -160,7 +168,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.post(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return data['added'] if 'added' in data else 0
     
@@ -174,7 +182,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.put(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         added = data['added'] if 'added' in data else 0
         removed = data['removed'] if 'removed' in data else 0
@@ -191,7 +199,7 @@ class PersonalizedStream(object):
         headers['Content-Type'] = 'application/json'
         
         response = requests.patch(url, data = form, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
     
         return data['removed'] if 'removed' in data else 0
     
@@ -201,7 +209,7 @@ class PersonalizedStream(object):
         headers = get_lf_token_header(network)
 
         response = requests.get(url, params = {'limit': limit, 'offset': offset}, headers = headers)
-        data = response.json()['data']
+        data = evaluate_response(response)['data']
         
         return [Subscription.serialize_from_json(x) for x in data['subscriptions']] if 'subscriptions' in data else []
     
@@ -215,5 +223,6 @@ class PersonalizedStream(object):
         elif since is not None:
             params['since'] = since
 
-        return requests.get(url, params = params, headers = headers).json()
+        response = requests.get(url, params = params, headers = headers)
+        return evaluate_response(response)
     

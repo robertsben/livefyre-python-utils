@@ -19,8 +19,8 @@ class NetworkTestCase(LfTest, unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, 'url_template should have {id}.'):
                 network.set_user_sync_url('http://thisisa.test.url/')
             
-        self.assertTrue(network.set_user_sync_url('http://answers.livefyre.com/{id}'))
-        self.assertTrue(network.sync_user('user'))
+        network.set_user_sync_url('http://answers.livefyre.com/{id}')
+        network.sync_user('user')
     
     @pytest.mark.unit
     def test_build_validate_user_token(self):
