@@ -44,7 +44,9 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         
         token = collection.build_collection_meta_token()
         
-        if pyver < 3.0:
+        if pyver < 2.7:
+            pass
+        elif pyver < 3.0:
             with self.assertRaisesRegexp(DecodeError, 'Signature verification failed'):
                 jwt.decode(token, self.site.key)
         else:

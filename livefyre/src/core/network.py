@@ -20,7 +20,7 @@ class Network(object):
         
         url = Domain.quill(self)+'/'
         data = {'actor_token' : self.build_livefyre_token(), 'pull_profile_url' : url_template}
-        headers = {'Content-type': 'application/json'}
+        headers = {'Content-type': 'application/json', 'Connection': 'close'}
         
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 204
@@ -28,7 +28,7 @@ class Network(object):
     def sync_user(self, user_id):
         url = '{0}/api/v3_0/user/{1}/refresh'.format(Domain.quill(self), user_id)
         data = {'lftoken' : self.build_livefyre_token()}
-        headers = {'Content-type': 'application/json'}
+        headers = {'Content-type': 'application/json', 'Connection': 'close'}
         
         request = requests.post(url=url, data=data, headers=headers)
         return request.status_code is 200

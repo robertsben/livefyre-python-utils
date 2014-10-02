@@ -1,13 +1,13 @@
 import re, pickle
 import sys as _sys
 
-try:
-    import urlparse
-except ImportError:
-    from urllib.parse import urlparse
-    
-
 pyver = float('%s.%s' % _sys.version_info[:2])
+
+if pyver < 3.0:
+    import urlparse
+else:
+    from urllib.parse import urlparse
+
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
     if isinstance(s, unicode):

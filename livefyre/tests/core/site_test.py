@@ -8,7 +8,10 @@ from livefyre.src.utils import pyver
 class SiteTestCase(LfTest, unittest.TestCase):
     def test_build_collection(self):
         site = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)
-        if pyver < 3.0:
+        
+        if pyver < 2.7:
+            pass
+        elif pyver < 3.0:
             with self.assertRaisesRegexp(AssertionError, 'url must be a full domain. ie. http://livefyre.com'):
                 site.build_collection('title', 'articleId', 'url.com')
             with self.assertRaisesRegexp(AssertionError, 'title\'s length should be under 255 char'):
