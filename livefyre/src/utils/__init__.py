@@ -9,21 +9,27 @@ except ImportError:
 
 pyver = float('%s.%s' % _sys.version_info[:2])
 
+
+def _unicode(s, encoding='utf-8', errors='strict'):
+    if pyver < 3.0:
+        return unicode(str(s), encoding, errors)
+    else:
+        return s.decode(encoding)
+
+
 def force_unicode(s, encoding='utf-8', errors='strict'):
     if (pyver < 3.0 and isinstance(s, unicode)) or (pyver >= 3.0 and isinstance(s, str)):
         return s
     if not isinstance(s, basestring,):
         if hasattr(s, '__unicode__'):
-            s = unicode(s)
+            s = _unicode(s)
         else:
             try:
-                s = unicode(str(s), encoding, errors)
+                s = _unicode(str(s), encoding, errors)
             except UnicodeEncodeError:
                 if not isinstance(s, Exception):
                     raise
-                s = ' '.join([force_unicode(arg, encoding, errors) for arg in s])
-                if pyver < 3.0:
-                    s = unicode(s)
+                s = _unicode(' '.join([force_unicode(arg, encoding, errors) for arg in s]))
     elif not isinstance(s, unicode):
         s = s.decode(encoding, errors)
     return s
