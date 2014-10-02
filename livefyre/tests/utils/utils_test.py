@@ -1,10 +1,11 @@
 # coding: utf-8
 
-import unittest
+import unittest, pytest
 
 from livefyre.src.utils import is_valid_full_url
 
 
+@pytest.mark.unit
 class UtilsTestCase(unittest.TestCase):
     def test_validate_url(self):
         self.assertFalse(is_valid_full_url("test.com"))

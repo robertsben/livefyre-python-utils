@@ -1,9 +1,12 @@
 from __future__ import print_function
 
-import ConfigParser, os, sys
+import ConfigParser, os, sys, pytest
 
 from enum import Enum
 
+
+unit = pytest.mark.NAME
+integration = pytest.mark.NAME
 
 class LfTest:
     NETWORK_NAME = '<NETWORK-NAME>'

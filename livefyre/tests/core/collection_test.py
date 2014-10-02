@@ -1,4 +1,4 @@
-import datetime, unittest, jwt
+import datetime, unittest, jwt, pytest
 
 from jwt import DecodeError
 from livefyre import Livefyre
@@ -15,7 +15,7 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         self.network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         self.site = self.network.get_site(self.SITE_ID, self.SITE_KEY)
         
-    
+    @pytest.mark.integration
     def test_create_update_collection(self):
         name = 'PythonCreateCollection' + str(datetime.datetime.now())
         
@@ -26,7 +26,8 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         collection.options = {'tags': 'super'}
         collection.create_or_update()
         self.assertEqual('super', collection.options['tags'])
-        
+    
+    @pytest.mark.unit
     def test_build_collection_token(self):
         collection = self.site.build_collection('title', 'articleId', 'https://livefyre.com', {'tags': 'tags', 'type': 'reviews'})
         token = collection.build_collection_meta_token()
@@ -56,6 +57,7 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         decoded_token = jwt.decode(token, self.network.key)
         self.assertEqual(self.network.get_urn(), decoded_token['iss'])
     
+    @pytest.mark.unit
     def test_build_checksum(self):
         collection = self.site.build_collection('title', 'articleId', 'http://livefyre.com', {'tags': 'tags'})
         checksum = collection.build_checksum()

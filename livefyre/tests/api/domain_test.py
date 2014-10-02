@@ -1,10 +1,11 @@
-import unittest
+import unittest, pytest
 
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.api.domain import Domain
 
 
+@pytest.mark.unit
 class DomainTestCase(LfTest, unittest.TestCase):
     def setUp(self):
         super(DomainTestCase, self).setUp()
