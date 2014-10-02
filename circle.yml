@@ -1,5 +1,6 @@
 dependencies:
   override:
+  - pyenv install 3.3.5
 
 test:
   pre:
@@ -14,7 +15,6 @@ test:
   - virtualenv -p ~/.pyenv/versions/3.2.5/bin/python3.2 venv32 --distribute
   - source venv32/bin/activate ; python setup.py install
   #ver. 3.3.5
-  - pyenv install 3.3.5
   - virtualenv -p ~/.pyenv/versions/3.3.5/bin/python3.3 venv33 --distribute
   - source venv33/bin/activate ; python setup.py install
   override:
