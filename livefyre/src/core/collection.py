@@ -73,9 +73,8 @@ class Collection(object):
             article_bytes = bytes(str(self.article_id))
         encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')
         url = '{0}/bs3/{1}/{2}/{3}/init'.format(Domain.bootstrap(self), self.site.network.name, self.site.site_id, encoded_article_id)
-        headers = {'Content-Type': 'application/json', 'Accepts': 'application/json', 'Connection': 'close'}
         
-        response = requests.get(url=url, headers=headers)
+        response = requests.get(url=url)
         if response.status_code == 200:
             return response.json()
         raise LivefyreException('Error contacting Livefyre. Status code: ' + str(response.status_code))
@@ -94,7 +93,7 @@ class Collection(object):
     def __invoke_collection_api(self, method):
         uri = '{0}/api/v3.0/site/{1}/collection/{2}/'.format(Domain.quill(self), self.site.site_id, method)
         data = self.__get_payload()
-        headers = {'Content-Type': 'application/json', 'Accepts': 'application/json', 'Connection': 'close'}
+        headers = {'Content-Type': 'application/json', 'Accepts': 'application/json'}
             
         response = requests.post(uri, params={'sync':1}, data=json.dumps(data), headers=headers)
         return response
