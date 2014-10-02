@@ -1,8 +1,13 @@
 from __future__ import print_function
 
-import ConfigParser, os, sys, pytest
-
+import os, sys, pytest
 from enum import Enum
+
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
+
 
 
 unit = pytest.mark.NAME
