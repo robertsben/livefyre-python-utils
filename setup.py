@@ -1,3 +1,4 @@
+import sys
 from setuptools import find_packages
 
 
@@ -15,13 +16,15 @@ try:
     readme = open('README.md').read()
 except IOError:
     readme = ''
+    
+version = open('VERSION').read()
 
 install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0', 'pytest == 2.6.3']
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='2.0.0',
+    version=version,
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
