@@ -26,7 +26,7 @@ def check_topics(network_urn, topics):
 class Collection(object):
     TYPE = ['reviews', 'sidenotes', 'ratings', 'counting', 'liveblog', 'livechat', 'livecomments']
     
-    def __init__(self, site, title, article_id, url, options={}):
+    def __init__(self, site, title, article_id, url, options):
         assert is_valid_full_url(url), 'url must be a full domain. ie. http://livefyre.com'
         assert len(title) <= 255, "title's length should be under 255 char"
         
@@ -36,6 +36,8 @@ class Collection(object):
                 raise AssertionError('type is not a recognized type. must be in {0}'.format(self.TYPE))
             if 'topics' in options:
                 self.network_issued = check_topics(site.network.get_urn(), options['topics'])
+            else:
+                self.network_issued = False
 
         self.site = site
         self.article_id = article_id
