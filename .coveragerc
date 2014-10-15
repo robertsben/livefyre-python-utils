@@ -1,3 +1,7 @@
+[run]
+source = livefyre/src
+parallel = True
+
 [report]
 omit =
     */python?.?/*
