@@ -12,23 +12,23 @@ test:
   #ver. 2.7.8
   - virtualenv -p ~/.pyenv/versions/2.7.8/bin/python2.7 venv27 --distribute
   - source venv27/bin/activate ; python setup.py install ; pip install coverage
-  # #ver. 3.2.5
-  # - virtualenv -p ~/.pyenv/versions/3.2.5/bin/python3.2 venv32 --distribute
-  # - source venv32/bin/activate ; python setup.py install ; pip install coverage
-  # #ver. 3.3.5
-  # - virtualenv -p ~/.pyenv/versions/3.3.5/bin/python3.3 venv33 --distribute
-  # - source venv33/bin/activate ; python setup.py install ; pip install coverage
+  #ver. 3.2.5
+  - virtualenv -p ~/.pyenv/versions/3.2.5/bin/python3.2 venv32 --distribute
+  - source venv32/bin/activate ; python setup.py install ; pip install coverage
+  #ver. 3.3.5
+  - virtualenv -p ~/.pyenv/versions/3.3.5/bin/python3.3 venv33 --distribute
+  - source venv33/bin/activate ; python setup.py install ; pip install coverage
   override:
   #TESTS
   #ver. 2.6.8
   - pip freeze
-  - source venv26/bin/activate ; pip freeze ; coverage run -p setup.py test
+  - source venv26/bin/activate ; coverage run -p setup.py test
   #ver. 2.7.8
   - source venv27/bin/activate ; coverage run -p setup.py test
-  # #ver. 3.2.5
-  # - source venv32/bin/activate ; coverage run -p setup.py test
-  # #ver. 3.3.5
-  # - source venv33/bin/activate ; coverage run -p setup.py test
+  #ver. 3.2.5
+  - source venv32/bin/activate ; coverage run -p setup.py test
+  #ver. 3.3.5
+  - source venv33/bin/activate ; coverage run -p setup.py test
   post:
   - coverage combine
   - coveralls
