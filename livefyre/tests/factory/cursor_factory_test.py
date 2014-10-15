@@ -1,12 +1,11 @@
-import datetime, unittest, pytest
+import datetime, unittest
 
 from livefyre import Livefyre
 from livefyre.tests import LfTest
-from livefyre.src.factory.cursorfactory import CursorFactory
-from livefyre.src.entity.topic import Topic
+from livefyre.src.cursor.factory import CursorFactory
+from livefyre.src.dto.topic import Topic
 
 
-@pytest.mark.unit
 class CursorFactoryTestCase(LfTest, unittest.TestCase):
     LIMIT = 10
     

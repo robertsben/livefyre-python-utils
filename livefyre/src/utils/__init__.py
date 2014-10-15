@@ -64,3 +64,15 @@ def is_valid_full_url(value):
         return match_url_regex(url)
     else:
         raise
+
+
+def get_network_from_core(core):
+    try:
+        return core.site.network
+    except AttributeError:
+        pass
+    
+    try:
+        return core.network
+    except AttributeError:
+        return core

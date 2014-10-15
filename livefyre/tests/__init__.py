@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import os, sys, pytest
+import os, sys
 from enum import Enum
 
 try:
@@ -8,10 +8,6 @@ try:
 except ImportError:
     import configparser as ConfigParser
 
-
-
-unit = pytest.mark.NAME
-integration = pytest.mark.NAME
 
 class LfTest:
     NETWORK_NAME = '<NETWORK-NAME>'

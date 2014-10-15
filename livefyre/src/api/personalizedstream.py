@@ -1,9 +1,9 @@
 import requests, jwt
 
 from livefyre.src.api.domain import Domain
-from livefyre.src.entity.topic import Topic
-from livefyre.src.entity.subscription import Subscription, SubscriptionType
-from livefyre.src.exceptions import LivefyreException
+from livefyre.src.dto.topic import Topic
+from livefyre.src.dto.subscription import Subscription, SubscriptionType
+from livefyre.src.exceptions import ApiException
 
 try:
     import simplejson as json
@@ -21,10 +21,8 @@ def get_lf_token_header(core, user_token=None):
     }
     
 def evaluate_response(response):
-    if response.status_code is 500:
-        raise LivefyreException('Livefyre appears to be down. Please see status.livefyre.com or contact us for more information')
     if response.status_code >= 400:
-        raise LivefyreException('Please check the contents of your request. Here is the response from our servers: ' + str(response.content))
+        raise ApiException(response.status_code)
     return response.json()
 
     

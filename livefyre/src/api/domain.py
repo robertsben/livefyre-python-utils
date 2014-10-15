@@ -1,15 +1,6 @@
-def get_network_from_core(core):
-    try:
-        return core.site.network
-    except AttributeError:
-        pass
-    
-    try:
-        return core.network
-    except AttributeError:
-        return core
-    
-    
+from livefyre.src.utils import get_network_from_core
+
+
 class Domain(object):
     @staticmethod
     def quill(core):

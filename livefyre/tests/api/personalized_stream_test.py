@@ -1,11 +1,10 @@
-import unittest, datetime, pytest
+import unittest, datetime
 
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.api.personalizedstream import PersonalizedStream
 
 
-@pytest.mark.integration
 class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
     def setUp(self):
         super(PersonalizedStreamsTestCase, self).setUp()

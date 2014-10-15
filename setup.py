@@ -17,7 +17,7 @@ except IOError:
     
 version = open('VERSION').read()
 
-install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0', 'pytest == 2.6.3']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0']
 
 setup(
     name='livefyre',

@@ -1,6 +1,7 @@
 dependencies:
   override:
   - pyenv install 3.3.5
+  - pip install coverage ; pip install coveralls
 
 test:
   pre:
@@ -18,26 +19,18 @@ test:
   - virtualenv -p ~/.pyenv/versions/3.3.5/bin/python3.3 venv33 --distribute
   - source venv33/bin/activate ; python setup.py install
   override:
-  #UNIT TESTS
+  #TESTS
   #ver. 2.6.8
-  - source venv26/bin/activate ; py.test -m unit
+  - source venv26/bin/activate ; coverage run -p setup.py test
   #ver. 2.7.8
-  - source venv27/bin/activate ; py.test -m unit
+  - source venv27/bin/activate ; coverage run -p setup.py test
   #ver. 3.2.5
-  - source venv32/bin/activate ; py.test -m unit
+  - source venv32/bin/activate ; coverage run -p setup.py test
   #ver. 3.3.5
-  - source venv33/bin/activate ; py.test -m unit
+  - source venv33/bin/activate ; coverage run -p setup.py test
   post:
-  #INTEGRATION TESTS
-  #ver. 2.6.8
-  - source venv26/bin/activate ; py.test -m integration
-  #ver. 2.7.8
-  - source venv27/bin/activate ; py.test -m integration
-  #ver. 3.2.5
-  - source venv32/bin/activate ; py.test -m integration
-  #ver. 3.3.5
-  - source venv33/bin/activate ; py.test -m integration
-
+  - coverage combine
+  - coveralls
 machine:
   timezone:
     America/Los_Angeles

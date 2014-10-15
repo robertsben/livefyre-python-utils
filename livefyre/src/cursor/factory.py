@@ -1,5 +1,5 @@
 from datetime import datetime
-from livefyre.src.entity.cursor import TimelineCursor
+from livefyre.src.cursor import TimelineCursor
 
 
 class CursorFactory(object):

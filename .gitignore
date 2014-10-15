@@ -9,3 +9,4 @@ venv*
 test.properties
 test.ini
 .settings/org.eclipse.core.resources.prefs
+.coverage
