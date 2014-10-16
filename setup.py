@@ -1,5 +1,8 @@
 from setuptools import find_packages
 
+import sys as _sys
+pyver = float('%s.%s' % _sys.version_info[:2])
+
 try:
     from setuptools import setup
 except ImportError:
@@ -17,7 +20,13 @@ except IOError:
     
 version = open('VERSION').read()
 
-install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2', 'enum34 == 1.0']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2']
+
+if pyver < 2.7:
+    install_requires.append('ordereddict == 1.1')
+    
+if pyver < 3.0:
+    install_requires.append('enum34 == 1.0')
 
 setup(
     name='livefyre',

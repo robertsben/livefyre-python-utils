@@ -1,4 +1,10 @@
-import collections
+from livefyre.src.utils import pyver
+
+
+if pyver < 2.7:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
 
 
 class CollectionData(object):
@@ -17,4 +23,4 @@ class CollectionData(object):
         attr.pop('article_id', None)
         attr.pop('collection_id', None)
         
-        return collections.OrderedDict(sorted(attr.items()))
+        return OrderedDict(sorted(attr.items()))
