@@ -54,9 +54,9 @@ class Collection(object):
         url = '{0}/bs3/{1}/{2}/{3}/init'.format(Domain.bootstrap(self), self.site.network.data.name, self.site.data.site_id, encoded_article_id)
         
         response = requests.get(url=url)
-        if response.status_code == 200:
+        if response.status_code <= 400:
             return response.json()
-        raise LivefyreException('Error contacting Livefyre. Status code: {0} \n Reason: {1}'.format(str(response.status_code), str(response.content)))
+        raise ApiException(response.status_code)
 
     @property
     def urn(self):

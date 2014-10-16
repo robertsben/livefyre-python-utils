@@ -25,7 +25,7 @@ install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2
 if pyver < 2.7:
     install_requires.append('ordereddict == 1.1')
     
-if pyver < 3.0:
+if pyver < 3.4:
     install_requires.append('enum34 == 1.0')
 
 setup(
