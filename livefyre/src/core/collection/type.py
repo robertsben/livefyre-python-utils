@@ -11,7 +11,7 @@ class CollectionType(Enum):
     SIDENOTES = 'sidenotes'
 
     def __init__(self, ctype):
-        self.ctype = ctype
+        self.type = ctype
         
     def __str__(self):
-        return self.ctype
+        return self.type

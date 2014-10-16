@@ -5,7 +5,7 @@ class NetworkValidator(Validator):
     def validate(self, data):
         reason = ''
         
-        if not hasattr(data, 'name'):
+        if not hasattr(data, 'name') or not data.name:
             reason += '\n name is missing.'
         elif not data.name.endswith('fyre.co'):
             reason += '\n name does not end in fyre.co.'

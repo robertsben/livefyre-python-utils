@@ -3,9 +3,38 @@ import unittest
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.utils import pyver
+from livefyre.src.core.network import Network
+from livefyre.src.core.network.model import NetworkData
  
  
 class NetworkTestCase(LfTest, unittest.TestCase):
+    def test_build_network(self):
+        network = Network(NetworkData(self.NETWORK_NAME, self.NETWORK_KEY))
+        self.assertEquals(network.data.name, self.NETWORK_NAME)
+        self.assertEquals(network.data.key, self.NETWORK_KEY)
+        self.assertEquals(network.network_name, self.NETWORK_NAME.split('.')[0])
+        
+        if pyver < 2.7:
+            pass
+        elif pyver < 3.0:
+            with self.assertRaisesRegexp(AssertionError, 'name is missing'):
+                Network.init(None, self.NETWORK_KEY)
+            with self.assertRaisesRegexp(AssertionError, 'key is missing'):
+                Network.init(self.NETWORK_NAME, None)
+        else:
+            with self.assertRaisesRegexp(AssertionError, 'name is missing'):
+                Network.init(None, self.NETWORK_KEY)
+            with self.assertRaisesRegexp(AssertionError, 'key is missing'):
+                Network.init(self.NETWORK_NAME, None)
+        
+        
+    def test_urn(self):
+        network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
+        self.assertEquals('urn:livefyre:'+self.NETWORK_NAME, network.urn)
+        
+        self.assertEquals(network.urn+':user='+self.USER_ID, network.get_urn_for_user(self.USER_ID))
+        
+        
     def test_set_user_sync_url(self):
         network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
          

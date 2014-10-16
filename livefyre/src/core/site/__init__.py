@@ -39,4 +39,4 @@ class Site(object):
     
     @property
     def urn(self):
-        return self.network.urn + ':site=' + self.data.site_id
+        return self.network.urn + ':site=' + self.data.id

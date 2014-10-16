@@ -26,7 +26,7 @@ class Collection(object):
     def create_or_update(self):
         response = self.__invoke_collection_api('create')
         if response.status_code == 200:
-            self.data.collection_id = response.json()['data']['collectionId']
+            self.data.id = response.json()['data']['collectionId']
             return self
         if response.status_code == 409:
             response = self.__invoke_collection_api('update')
@@ -51,7 +51,7 @@ class Collection(object):
         else:
             article_bytes = bytes(str(self.data.article_id))
         encoded_article_id = base64.b64encode(article_bytes).decode('utf-8')
-        url = '{0}/bs3/{1}/{2}/{3}/init'.format(Domain.bootstrap(self), self.site.network.data.name, self.site.data.site_id, encoded_article_id)
+        url = '{0}/bs3/{1}/{2}/{3}/init'.format(Domain.bootstrap(self), self.site.network.data.name, self.site.data.id, encoded_article_id)
         
         response = requests.get(url=url)
         if response.status_code <= 400:
@@ -60,7 +60,7 @@ class Collection(object):
 
     @property
     def urn(self):
-        return self.site.urn + ':collection=' + self.data.collection_id
+        return self.site.urn + ':collection=' + self.data.id
     
     def is_network_issued(self):
         topics = getattr(self.data, 'topics', None)
@@ -72,11 +72,11 @@ class Collection(object):
                     if topic_id.startswith(network_urn) and not topic_id.replace(network_urn, '?', 1).startswith(':site='):
                         return True
                 except AttributeError:
-                    raise LivefyreException("Collection attribute topics should be a list of Topic objects!")
+                    raise LivefyreException('Collection attribute topics should be a list of Topic objects!')
         return False
 
     def __invoke_collection_api(self, method):
-        uri = '{0}/api/v3.0/site/{1}/collection/{2}/'.format(Domain.quill(self), self.site.data.site_id, method)
+        uri = '{0}/api/v3.0/site/{1}/collection/{2}/'.format(Domain.quill(self), self.site.data.id, method)
         data = self.__get_payload()
         headers = {'Content-Type': 'application/json', 'Accepts': 'application/json'}
             

@@ -5,6 +5,9 @@ from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.dto.topic import Topic
 from livefyre.src.utils import pyver
+from livefyre.src.exceptions import LivefyreException
+from livefyre.src.core.collection import Collection
+from livefyre.src.core.collection.type import CollectionType
 
 
 class CollectionTestCase(LfTest, unittest.TestCase):
@@ -15,12 +18,55 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         self.network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         self.site = self.network.get_site(self.SITE_ID, self.SITE_KEY)
         
+        
+    def test_build_collection__fail(self):
+        if pyver < 2.7:
+            pass
+        elif pyver < 3.0:
+            with self.assertRaisesRegexp(AssertionError, 'title is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, None, self.ARTICLE_ID, self.URL)
+            with self.assertRaisesRegexp(AssertionError, 'article_id is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, None, self.URL)
+            with self.assertRaisesRegexp(AssertionError, 'url is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, self.ARTICLE_ID, None)
+            with self.assertRaisesRegexp(AssertionError, 'type is missing'):
+                Collection.init(self.site, None, self.TITLE, self.ARTICLE_ID, self.URL)
+        else:
+            with self.assertRaisesRegex(AssertionError, 'title is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, None, self.ARTICLE_ID, self.URL)
+            with self.assertRaisesRegex(AssertionError, 'article_id is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, None, self.URL)
+            with self.assertRaisesRegex(AssertionError, 'url is missing'):
+                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, self.ARTICLE_ID, None)
+            with self.assertRaisesRegex(AssertionError, 'type is missing'):
+                Collection.init(self.site, None, self.TITLE, self.ARTICLE_ID, self.URL)
+        
+        
+    def test_urn(self):
+        name = 'PythonCreateCollection' + str(datetime.datetime.now())
+        collection = self.site.build_livecomments_collection(name, name, self.URL)
+        collection.data.id = '100'
+        self.assertEquals(self.site.urn+':collection=100', collection.urn)
+        
+    def test_network_issued_fail(self):
+        collection = self.site.build_livecomments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
+        collection.data.topics = ['fjaowiefj']
+
+        if pyver < 2.7:
+            pass
+        elif pyver < 3.0:
+            with self.assertRaisesRegexp(LivefyreException, 'Collection attribute topics should be a list of Topic objects!'):
+                collection.is_network_issued()
+        else:
+            with self.assertRaisesRegexp(LivefyreException, 'Collection attribute topics should be a list of Topic objects!'):
+                collection.is_network_issued()
+        
     def test_create_update_collection(self):
         name = 'PythonCreateCollection' + str(datetime.datetime.now())
         
         collection = self.site.build_livecomments_collection(name, name, self.URL).create_or_update()
         other_id = collection.get_collection_content()['collectionSettings']['collectionId']
-        self.assertEqual(collection.data.collection_id, other_id)
+        self.assertEqual(collection.data.id, other_id)
         
         collection.data.title = name+'super'
         collection.create_or_update()
