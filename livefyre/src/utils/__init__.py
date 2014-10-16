@@ -67,12 +67,9 @@ def is_valid_full_url(value):
 
 
 def get_network_from_core(core):
-    try:
+    if hasattr(core, 'site'):
         return core.site.network
-    except AttributeError:
-        pass
-    
-    try:
+    elif hasattr(core, 'network'):
         return core.network
-    except AttributeError:
+    else:
         return core

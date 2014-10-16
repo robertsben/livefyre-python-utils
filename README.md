@@ -1,6 +1,7 @@
 # Livefyre Python Utility Classes
 [![PyPI version](https://badge.fury.io/py/livefyre.png)](http://badge.fury.io/py/livefyre)
 [![Circle CI](https://circleci.com/gh/Livefyre/livefyre-python-utils.png?style=badge)](https://circleci.com/gh/Livefyre/livefyre-python-utils)
+[![Coverage Status](https://coveralls.io/repos/Livefyre/livefyre-python-utils/badge.png)](https://coveralls.io/r/Livefyre/livefyre-python-utils)
 
 Livefyre's official library for common server-side tasks necessary for getting Livefyre apps (comments, reviews, etc.) working on your website.
 

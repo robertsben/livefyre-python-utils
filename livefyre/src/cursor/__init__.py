@@ -1,41 +1,45 @@
+import datetime
+
 from livefyre.src.api.personalizedstream import PersonalizedStream
+from .model import CursorData
+from .validator import CursorValidator
 
 
 class TimelineCursor(object):
-    def __init__(self, core, resource, limit, date):
+    def __init__(self, core, data):
         self.core = core
-        self.resource = resource
-        self.limit = limit
-        self.cursor_time = date.utcnow().isoformat() + 'Z'
-        self.hasNext = False
-        self.hasPrevious = False
+        self.data = data
+        
+    @staticmethod
+    def init(core, resource, limit, date):
+        data = CursorData(resource, limit, date)
+        return TimelineCursor(core, CursorValidator().validate(data))
     
-    #slight deviation as python3.0+ gets confused by next()
+    #slight deviation from other libraries as python3.0+ gets confused by next()
     def next_items(self, limit=None):
         if limit is None:
-            limit = self.limit
+            limit = self.data.limit
         
-        data = PersonalizedStream.get_timeline_stream(self.core, self.resource, limit, None, self.cursor_time)
+        data = PersonalizedStream.get_timeline_stream(self.core, self.data.resource, limit, None, self.data.cursor_time)
         cursor = data['meta']['cursor']
         
-        self.hasNext = cursor['hasNext']
-        self.hasPrevious = cursor['next'] is not None
-        self.cursor_time = cursor['next']
+        self.data.hasNext = cursor['hasNext']
+        self.data.hasPrevious = cursor['next'] is not None
+        if self.data.hasPrevious:
+            self.data.cursor_time = cursor['next']
 
         return data
         
     def previous_items(self, limit=None):
         if limit is None:
-            limit = self.limit
+            limit = self.data.limit
 
-        data = PersonalizedStream.get_timeline_stream(self.core, self.resource, limit, self.cursor_time, None)
+        data = PersonalizedStream.get_timeline_stream(self.core, self.data.resource, limit, self.data.cursor_time, None)
         cursor = data['meta']['cursor']
         
-        self.hasPrevious = cursor['hasPrev']
-        self.hasNext = cursor['prev'] is not None
-        self.cursor_time = cursor['prev']
+        self.data.hasPrevious = cursor['hasPrev']
+        self.data.hasNext = cursor['prev'] is not None
+        if self.data.hasNext:
+            self.data.cursor_time = cursor['prev']
 
         return data
-    
-    def set_cursor_time(self, new_time):
-        self.cursor_time = new_time.utcnow().isoformat() + 'Z'

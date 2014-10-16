@@ -1,13 +1,12 @@
 from livefyre.src.utils.validator import Validator
 
 
-class CursorValidator(Validator):
+class SiteValidator(Validator):
     def validate(self, data):
         reason = ''
         
-        reason += self.verify_attr(data, 'resource')
-        reason += self.verify_attr(data, 'limit')
-        reason += self.verify_attr(data, 'cursor_time')
+        reason += self.verify_attr(data, 'site_id')
+        reason += self.verify_attr(data, 'key')
         
         if len(reason) > 0:
             expl = 'Problems with your site input:' + reason

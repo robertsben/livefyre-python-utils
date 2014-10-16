@@ -8,7 +8,7 @@ from livefyre.src.utils import pyver
 
 
 class CollectionTestCase(LfTest, unittest.TestCase):
-    CHECKSUM = '3631759a11c4e0671d9ab5c1c90153c9'
+    CHECKSUM = '8bcfca7fb2187b1dcb627506deceee32'
     
     def setUp(self):
         super(CollectionTestCase, self).setUp()
@@ -18,28 +18,31 @@ class CollectionTestCase(LfTest, unittest.TestCase):
     def test_create_update_collection(self):
         name = 'PythonCreateCollection' + str(datetime.datetime.now())
         
-        collection = self.site.build_collection(name, name, self.URL).create_or_update()
+        collection = self.site.build_livecomments_collection(name, name, self.URL).create_or_update()
         other_id = collection.get_collection_content()['collectionSettings']['collectionId']
-        self.assertEqual(collection.get_collection_id(), other_id)
+        self.assertEqual(collection.data.collection_id, other_id)
         
-        collection.options = {'tags': 'super'}
+        title = collection.data.title = name+'super'
+        
         collection.create_or_update()
-        self.assertEqual('super', collection.options['tags'])
+        content = collection.get_collection_content()
+        self.assertEqual(title, content['collectionSettings']['title'])
     
     def test_build_collection_token(self):
-        collection = self.site.build_collection('title', 'articleId', 'https://livefyre.com', {'tags': 'tags', 'type': 'reviews'})
+        collection = self.site.build_reviews_collection('title', 'articleId', 'https://livefyre.com')
         token = collection.build_collection_meta_token()
          
         self.assertTrue(token)
         self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'reviews')
         
-        collection = self.site.build_collection('title', 'articleId', 'https://livefyre.com', {'type': 'liveblog'})
+        collection = self.site.build_liveblog_collection('title', 'articleId', 'https://livefyre.com')
         token = collection.build_collection_meta_token()
         self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'liveblog')
         
         topics = [Topic.create(self.network, '1', '1')]
-        collection = self.site.build_collection(self.TITLE, self.ARTICLE_ID, self.URL, {'topics': topics})
-        self.assertTrue(collection.network_issued)
+        collection = self.site.build_livecomments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
+        collection.data.topics = topics
+        self.assertTrue(collection.is_network_issued())
         
         token = collection.build_collection_meta_token()
         
@@ -47,16 +50,18 @@ class CollectionTestCase(LfTest, unittest.TestCase):
             pass
         elif pyver < 3.0:
             with self.assertRaisesRegexp(DecodeError, 'Signature verification failed'):
-                jwt.decode(token, self.site.key)
+                jwt.decode(token, self.site.data.key)
         else:
             with self.assertRaisesRegex(DecodeError, 'Signature verification failed'):
-                jwt.decode(token, self.site.key)
+                jwt.decode(token, self.site.data.key)
         
-        decoded_token = jwt.decode(token, self.network.key)
-        self.assertEqual(self.network.get_urn(), decoded_token['iss'])
+        decoded_token = jwt.decode(token, self.network.data.key)
+        self.assertEqual(self.network.urn, decoded_token['iss'])
     
     def test_build_checksum(self):
-        collection = self.site.build_collection('title', 'articleId', 'http://livefyre.com', {'tags': 'tags'})
+        collection = self.site.build_livecomments_collection('title', 'articleId', 'http://livefyre.com')
+        collection.data.tags = 'tags'
+
         checksum = collection.build_checksum()
         self.assertEqual(self.CHECKSUM, checksum, 'checksum is not correct.')
         

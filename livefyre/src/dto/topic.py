@@ -27,9 +27,10 @@ class Topic(object):
     
     @staticmethod
     def generate_urn(core, topic_id):
-        return core.get_urn() + Topic.TOPIC_IDENTIFIER + str(topic_id)
+        return core.urn + Topic.TOPIC_IDENTIFIER + str(topic_id)
     
-    def get_truncated_id(self):
+    @property
+    def truncated_id(self):
         return self.topic_id[self.topic_id.find(self.TOPIC_IDENTIFIER) + len(self.TOPIC_IDENTIFIER):]
     
     def to_dict(self):
