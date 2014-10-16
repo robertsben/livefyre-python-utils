@@ -72,8 +72,7 @@ class Collection(object):
                     if topic_id.startswith(network_urn) and not topic_id.replace(network_urn, '?', 1).startswith(':site='):
                         return True
                 except AttributeError:
-                    print "Attribute topics should be a list of Topic objects!"
-                    raise
+                    raise LivefyreException("Collection attribute topics should be a list of Topic objects!")
         return False
 
     def __invoke_collection_api(self, method):
