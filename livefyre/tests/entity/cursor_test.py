@@ -13,8 +13,14 @@ class TimelineCursorTestCase(LfTest, unittest.TestCase):
     def test_build_cursor(self):
         network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         
-        cursor = TimelineCursor(network, CursorData("resource", 50, datetime.datetime.now()))
+        date = datetime.datetime.now()
+        
+        cursor = TimelineCursor(network, CursorData("resource", 50, date))
+        time = cursor.data.cursor_time
         self.assertTrue(cursor)
+        
+        cursor.data.set_cursor_time(date)
+        self.assertEquals(time, cursor.data.cursor_time)
         
         if pyver < 2.7:
             pass

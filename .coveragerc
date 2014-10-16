@@ -6,3 +6,5 @@ parallel = True
 omit =
     */python?.?/*
     */site-packages/nose/*
+    */exceptions/*
+    */utils/*
