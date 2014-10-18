@@ -16,11 +16,8 @@ class TimelineCursor(object):
         return TimelineCursor(core, CursorValidator().validate(data))
     
     #slight deviation from other libraries as python3.0+ gets confused by next()
-    def next_items(self, limit=None):
-        if limit is None:
-            limit = self.data.limit
-        
-        data = PersonalizedStream.get_timeline_stream(self.core, self.data.resource, limit, None, self.data.cursor_time)
+    def next_items(self):
+        data = PersonalizedStream.get_timeline_stream(self.core, self.data, True)
         cursor = data['meta']['cursor']
         
         self.data.hasNext = cursor['hasNext']
@@ -30,11 +27,8 @@ class TimelineCursor(object):
 
         return data
         
-    def previous_items(self, limit=None):
-        if limit is None:
-            limit = self.data.limit
-
-        data = PersonalizedStream.get_timeline_stream(self.core, self.data.resource, limit, self.data.cursor_time, None)
+    def previous_items(self):
+        data = PersonalizedStream.get_timeline_stream(self.core, self.data, False)
         cursor = data['meta']['cursor']
         
         self.data.hasPrevious = cursor['hasPrev']
