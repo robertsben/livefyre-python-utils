@@ -3,6 +3,7 @@ import unittest, datetime
 from livefyre import Livefyre
 from livefyre.tests import LfTest
 from livefyre.src.api.personalizedstream import PersonalizedStream
+from livefyre.src.cursor.model import CursorData
 
 
 class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
@@ -137,8 +138,9 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
       
     def test_timeline_cursor(self):
         topic = PersonalizedStream.create_or_update_topic(self.network, '1', 'UN')
+        data = CursorData(topic.topic_id +":topicStream", 50, datetime.datetime.now())
         
-        data = PersonalizedStream.get_timeline_stream(self.network, topic.topic_id +":topicStream")
+        data = PersonalizedStream.get_timeline_stream(self.network, data, True)
         self.assertTrue(data)
         
         PersonalizedStream.delete_topic(self.network, topic)
