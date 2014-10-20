@@ -10,7 +10,7 @@ class CursorValidator(Validator):
         reason += self.verify_attr(data, 'cursor_time')
         
         if len(reason) > 0:
-            expl = 'Problems with your site input:' + reason
+            expl = 'Problems with your cursor input:' + reason
             raise AssertionError(expl)
         
         return data

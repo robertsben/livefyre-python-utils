@@ -17,7 +17,7 @@ class TimelineCursor(object):
     
     #slight deviation from other libraries as python3.0+ gets confused by next()
     def next_items(self):
-        data = PersonalizedStream.get_timeline_stream(self.core, self.data, True)
+        data = PersonalizedStream.get_timeline_stream(self, True)
         cursor = data['meta']['cursor']
         
         self.data.hasNext = cursor['hasNext']
@@ -28,7 +28,7 @@ class TimelineCursor(object):
         return data
         
     def previous_items(self):
-        data = PersonalizedStream.get_timeline_stream(self.core, self.data, False)
+        data = PersonalizedStream.get_timeline_stream(self, False)
         cursor = data['meta']['cursor']
         
         self.data.hasPrevious = cursor['hasPrev']

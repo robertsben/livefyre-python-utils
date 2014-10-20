@@ -213,15 +213,15 @@ class PersonalizedStream(object):
         return [Subscription.serialize_from_json(x) for x in data['subscriptions']] if 'subscriptions' in data else []
     
     @staticmethod
-    def get_timeline_stream(core, data, is_next):
-        url = PersonalizedStream.STREAM_BASE_URL.format(Domain.bootstrap(core)) + PersonalizedStream.TIMELINE_PATH
-        headers = get_lf_token_header(core)
-        params = {'resource': data.resource, 'limit': data.limit}
+    def get_timeline_stream(cursor, is_next):
+        url = PersonalizedStream.STREAM_BASE_URL.format(Domain.bootstrap(cursor.core)) + PersonalizedStream.TIMELINE_PATH
+        headers = get_lf_token_header(cursor.core)
+        params = {'resource': cursor.data.resource, 'limit': cursor.data.limit}
         
         if is_next:
-            params['since'] = data.cursor_time
+            params['since'] = cursor.data.cursor_time
         else:
-            params['until'] = data.cursor_time
+            params['until'] = cursor.data.cursor_time
 
         response = requests.get(url, params = params, headers = headers)
         return evaluate_response(response)
