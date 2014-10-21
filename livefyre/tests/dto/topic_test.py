@@ -2,6 +2,7 @@ import unittest
 
 from livefyre.tests import LfTest
 from livefyre.src.dto.topic import Topic
+from livefyre import Livefyre
 
 try:
     import simplejson as json
@@ -35,6 +36,9 @@ class TopicTestCase(LfTest, unittest.TestCase):
         
         topic3 = json.dumps(topic2)
         self.assertEqual(json.dumps(self.DICT), topic3)
+        
+        topic = topic.create(Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY), 'ID', 'LABEL')
+        self.assertEqual(topic.truncated_id, 'ID')
         
         
 if __name__ == '__main__':
