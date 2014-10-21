@@ -30,4 +30,4 @@ class ApiStatus(Enum):
         for status in ApiStatus.__members__.values():
             if code is status.code:
                 return status
-        raise ValueError('Error code ' + code + ' has not been accounted for! Please contact us at tools@livefyre.com with this message.')
+        raise ValueError('Error code {} has not been accounted for! Please contact us at tools@livefyre.com with this message.'.format(code))
