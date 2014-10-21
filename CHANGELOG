@@ -1,6 +1,6 @@
 === 2.0.0 2014-10-16
 
-* Refactored Collection related methods into it's own class.
+* Refactored Collection related methods into its own class.
 * Restructured the library.
 * Divided models/validators from core functions.
 * Added more tests and coverage.

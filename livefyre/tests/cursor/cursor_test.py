@@ -38,13 +38,13 @@ class TimelineCursorTestCase(LfTest, unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, 'cursor_time is missing'):
                 TimelineCursor.init(network, 'resource', 50, None)
         
-#     def test_api_calls(self):
-#         network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
-#         cursor = CursorFactory.get_personal_stream_cursor(network, self.USER_ID)
-#         
-#         cursor.next_items()
-#         json = cursor.previous_items()
-#         self.assertTrue(json)
+    def test_api_calls(self):
+        network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
+        cursor = CursorFactory.get_personal_stream_cursor(network, self.USER_ID)
+         
+        cursor.next_items()
+        json = cursor.previous_items()
+        self.assertTrue(json)
 
         
         
