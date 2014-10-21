@@ -4,7 +4,7 @@ from livefyre.src.api.domain import Domain
 from livefyre.src.dto.topic import Topic
 from livefyre.src.dto.subscription import Subscription, SubscriptionType
 from livefyre.src.exceptions import ApiException
-from livefyre.src.utils import get_network_from_core
+from livefyre.src.utils import get_network_from_core, pyver
 
 try:
     import simplejson as json
@@ -68,9 +68,9 @@ class PersonalizedStream(object):
     @staticmethod
     def create_or_update_topics(core, topic_map):
         topics = []
-        try:
+        if pyver < 3.0:
             topics = [Topic.create(core, k, v) for k, v in topic_map.iteritems()]
-        except:
+        else:
             topics = [Topic.create(core, k, v) for k, v in topic_map.items()]
         
         for topic in topics:
