@@ -7,8 +7,6 @@ class NetworkValidator(Validator):
         
         if not hasattr(data, 'name') or not data.name:
             reason += '\n name is missing.'
-        elif not data.name.endswith('fyre.co'):
-            reason += '\n name does not end in fyre.co.'
         
         reason += self.verify_attr(data, 'key')
         

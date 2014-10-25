@@ -21,15 +21,11 @@ class NetworkTestCase(LfTest, unittest.TestCase):
                 Network.init(None, self.NETWORK_KEY)
             with self.assertRaisesRegexp(AssertionError, 'key is missing'):
                 Network.init(self.NETWORK_NAME, None)
-            with self.assertRaisesRegexp(AssertionError, 'name does not end in fyre.co'):
-                Network.init('None', self.NETWORK_KEY)
         else:
             with self.assertRaisesRegexp(AssertionError, 'name is missing'):
                 Network.init(None, self.NETWORK_KEY)
             with self.assertRaisesRegexp(AssertionError, 'key is missing'):
                 Network.init(self.NETWORK_NAME, None)
-            with self.assertRaisesRegex(AssertionError, 'name does not end in fyre.co'):
-                Network.init('None', self.NETWORK_KEY)
         
         
     def test_urn(self):
@@ -62,9 +58,14 @@ class NetworkTestCase(LfTest, unittest.TestCase):
         elif pyver < 3.0:
             with self.assertRaisesRegexp(AssertionError, 'user_id should only contain alphanumeric characters'):
                 network.build_user_auth_token('system@blah', 'testName', 86400.0)
+            with self.assertRaisesRegexp(AssertionError, 'expires should be a number'):
+                network.build_user_auth_token('blah', 'blah', '100')
+            
         else:
             with self.assertRaisesRegex(AssertionError, 'user_id should only contain alphanumeric characters'):
                 network.build_user_auth_token('system@blah', 'testName', 86400.0)
+            with self.assertRaisesRegex(AssertionError, 'expires should be a number'):
+                network.build_user_auth_token('blah', 'blah', '100')
          
         token = network.build_livefyre_token()
          
