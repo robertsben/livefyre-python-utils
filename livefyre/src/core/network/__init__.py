@@ -47,7 +47,12 @@ class Network(object):
     
     def build_user_auth_token(self, user_id, display_name, expires):
         assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
-        assert isinstance(expires, (int, long, float, complex)), 'expires should be a number'
+        
+        if pyver < 3.0:
+            assert isinstance(expires, (int, long, float, complex)), 'expires should be a number'
+        else:
+            assert isinstance(expires, (int, float, complex)), 'expires should be a number'
+            
 
         token = jwt.encode({
                 'domain': self.data.name,
