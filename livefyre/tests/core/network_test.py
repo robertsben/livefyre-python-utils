@@ -21,11 +21,15 @@ class NetworkTestCase(LfTest, unittest.TestCase):
                 Network.init(None, self.NETWORK_KEY)
             with self.assertRaisesRegexp(AssertionError, 'key is missing'):
                 Network.init(self.NETWORK_NAME, None)
+            with self.assertRaisesRegexp(AssertionError, 'name must end with \'fyre.co\''):
+                Network.init('network.name', self.NETWORK_KEY)
         else:
-            with self.assertRaisesRegexp(AssertionError, 'name is missing'):
+            with self.assertRaisesRegex(AssertionError, 'name is missing'):
                 Network.init(None, self.NETWORK_KEY)
-            with self.assertRaisesRegexp(AssertionError, 'key is missing'):
+            with self.assertRaisesRegex(AssertionError, 'key is missing'):
                 Network.init(self.NETWORK_NAME, None)
+            with self.assertRaisesRegex(AssertionError, 'name must end with \'fyre.co\''):
+                Network.init('network.name', self.NETWORK_KEY)
         
         
     def test_urn(self):
