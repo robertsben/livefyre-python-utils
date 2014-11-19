@@ -1,4 +1,4 @@
-import time, jwt, requests
+import re, time, jwt, requests
 
 from livefyre.src.core.site import Site
 from livefyre.src.api.domain import Domain
@@ -46,7 +46,7 @@ class Network(object):
         return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)
     
     def build_user_auth_token(self, user_id, display_name, expires):
-        assert user_id.isalnum(), 'user_id should only contain alphanumeric characters'
+        assert re.match(r'^[a-zA-Z0-9_\.-]+$', user_id) is not None, 'user_id should only contain alphanumeric characters'
         
         if pyver < 3.0:
             assert isinstance(expires, (int, long, float, complex)), 'expires should be a number'

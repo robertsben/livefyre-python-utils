@@ -3,9 +3,9 @@ from enum import Enum
 
 class CollectionType(Enum):
     COUNTING = 'counting'
-    LIVEBLOG = 'liveblog'
-    LIVECHAT = 'livechat'
-    LIVECOMMENTS = 'livecomments'
+    BLOG = 'liveblog'
+    CHAT = 'livechat'
+    COMMENTS = 'livecomments'
     RATINGS = 'ratings'
     REVIEWS = 'reviews'
     SIDENOTES = 'sidenotes'

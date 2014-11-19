@@ -56,15 +56,15 @@ class SiteTestCase(LfTest, unittest.TestCase):
         
         collection = site.build_livecomments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
-        self.assertEquals(collection.data.type, CollectionType.LIVECOMMENTS)
+        self.assertEquals(collection.data.type, CollectionType.COMMENTS)
         
         collection = site.build_livechat_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
-        self.assertEquals(collection.data.type, CollectionType.LIVECHAT)
+        self.assertEquals(collection.data.type, CollectionType.CHAT)
         
         collection = site.build_liveblog_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
-        self.assertEquals(collection.data.type, CollectionType.LIVEBLOG)
+        self.assertEquals(collection.data.type, CollectionType.BLOG)
         
         collection = site.build_counting_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
@@ -82,9 +82,9 @@ class SiteTestCase(LfTest, unittest.TestCase):
         self.assertTrue(collection)
         self.assertEquals(collection.data.type, CollectionType.SIDENOTES)
         
-        collection = site.build_collection(CollectionType.LIVECOMMENTS, self.TITLE, self.ARTICLE_ID, self.URL)
+        collection = site.build_collection(CollectionType.COMMENTS, self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
-        self.assertEquals(collection.data.type, CollectionType.LIVECOMMENTS)        
+        self.assertEquals(collection.data.type, CollectionType.COMMENTS)        
         
     def test_get_urn(self):
         site = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY).get_site(self.SITE_ID, self.SITE_KEY)

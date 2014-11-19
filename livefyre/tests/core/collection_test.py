@@ -24,20 +24,20 @@ class CollectionTestCase(LfTest, unittest.TestCase):
             pass
         elif pyver < 3.0:
             with self.assertRaisesRegexp(AssertionError, 'title is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, None, self.ARTICLE_ID, self.URL)
+                Collection.init(self.site, CollectionType.COMMENTS, None, self.ARTICLE_ID, self.URL)
             with self.assertRaisesRegexp(AssertionError, 'article_id is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, None, self.URL)
+                Collection.init(self.site, CollectionType.COMMENTS, self.TITLE, None, self.URL)
             with self.assertRaisesRegexp(AssertionError, 'url is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, self.ARTICLE_ID, None)
+                Collection.init(self.site, CollectionType.COMMENTS, self.TITLE, self.ARTICLE_ID, None)
             with self.assertRaisesRegexp(AssertionError, 'type is missing'):
                 Collection.init(self.site, None, self.TITLE, self.ARTICLE_ID, self.URL)
         else:
             with self.assertRaisesRegex(AssertionError, 'title is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, None, self.ARTICLE_ID, self.URL)
+                Collection.init(self.site, CollectionType.COMMENTS, None, self.ARTICLE_ID, self.URL)
             with self.assertRaisesRegex(AssertionError, 'article_id is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, None, self.URL)
+                Collection.init(self.site, CollectionType.COMMENTS, self.TITLE, None, self.URL)
             with self.assertRaisesRegex(AssertionError, 'url is missing'):
-                Collection.init(self.site, CollectionType.LIVECOMMENTS, self.TITLE, self.ARTICLE_ID, None)
+                Collection.init(self.site, CollectionType.COMMENTS, self.TITLE, self.ARTICLE_ID, None)
             with self.assertRaisesRegex(AssertionError, 'type is missing'):
                 Collection.init(self.site, None, self.TITLE, self.ARTICLE_ID, self.URL)
         
