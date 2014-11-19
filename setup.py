@@ -1,5 +1,7 @@
 from setuptools import find_packages
 
+import sys as _sys
+pyver = float('%s.%s' % _sys.version_info[:2])
 
 try:
     from setuptools import setup
@@ -15,13 +17,21 @@ try:
     readme = open('README.md').read()
 except IOError:
     readme = ''
+    
+version = open('VERSION').read()
 
-install_requires = ['PyJWT == 0.2.1', 'requests == 2.2.1', 'python-dateutil == 2.2', 'enum34 == 1.0']
+install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2']
+
+if pyver < 2.7:
+    install_requires.append('ordereddict == 1.1')
+    
+if pyver < 3.4:
+    install_requires.append('enum34 == 1.0')
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='1.3.2',
+    version=version,
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
@@ -33,6 +43,7 @@ setup(
     install_requires=install_requires,
     test_suite='livefyre.tests',
     use_2to3=True,
+    zip_safe=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

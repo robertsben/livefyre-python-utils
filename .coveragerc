@@ -1,0 +1,10 @@
+[run]
+source = livefyre/src
+parallel = True
+
+[report]
+omit =
+    */python?.?/*
+    */site-packages/nose/*
+    */exceptions/*
+    */utils/*

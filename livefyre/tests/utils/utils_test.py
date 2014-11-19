@@ -16,3 +16,9 @@ class UtilsTestCase(unittest.TestCase):
         self.assertTrue(is_valid_full_url("http://清华大学.cn"))
         self.assertTrue(is_valid_full_url("http://www.mysite.com/myresumé.html"))
         self.assertTrue(is_valid_full_url("https://test.com/path/test.-_~!$&'()*+,=:@/dash"))
+
+
+    #need more util tests
+        
+if __name__ == '__main__':
+    unittest.main()

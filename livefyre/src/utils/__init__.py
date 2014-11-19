@@ -1,24 +1,38 @@
-import re
-import urlparse
+import re, pickle
+import sys as _sys
+
+try:
+    import urlparse
+except ImportError:
+    import urllib.parse as urlparse
+
+
+pyver = float('%s.%s' % _sys.version_info[:2])
+
+
+def _unicode(s, encoding='utf-8', errors='strict'):
+    if pyver < 3.0:
+        return unicode(str(s), encoding, errors)
+    else:
+        return s.decode(encoding)
 
 
 def force_unicode(s, encoding='utf-8', errors='strict'):
-    if isinstance(s, unicode):
+    if (pyver < 3.0 and isinstance(s, unicode)) or (pyver >= 3.0 and isinstance(s, str)):
         return s
     if not isinstance(s, basestring,):
         if hasattr(s, '__unicode__'):
-            s = unicode(s)
+            s = _unicode(s)
         else:
             try:
-                s = unicode(str(s), encoding, errors)
+                s = _unicode(str(s), encoding, errors)
             except UnicodeEncodeError:
                 if not isinstance(s, Exception):
                     raise
-                s = u' '.join([force_unicode(arg, encoding, errors) for arg in s])
+                s = _unicode(' '.join([force_unicode(arg, encoding, errors) for arg in s]))
     elif not isinstance(s, unicode):
         s = s.decode(encoding, errors)
     return s
-
     
     
 def match_url_regex(url):
@@ -44,7 +58,18 @@ def is_valid_full_url(value):
             netloc = netloc.encode('idna') # IDN -> ACE
         except UnicodeError: # invalid domain part
             raise
+        if pyver > 3.0:
+            netloc = netloc.decode('utf-8')
         url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
         return match_url_regex(url)
     else:
         raise
+
+
+def get_network_from_core(core):
+    if hasattr(core, 'site'):
+        return core.site.network
+    elif hasattr(core, 'network'):
+        return core.network
+    else:
+        return core
