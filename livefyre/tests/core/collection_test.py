@@ -73,6 +73,11 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         #works but takes some time on the server side to update...
 #         content = collection.get_collection_content()
 #         self.assertEqual(name+'super', content['collectionSettings']['title'])
+
+        c_id = collection.data.id
+        collection.data.id = None
+        collection.create_or_update()
+        self.assertEqual(c_id, collection.data.id)
     
     def test_build_collection_token(self):
         collection = self.site.build_reviews_collection('title', 'articleId', 'https://livefyre.com')

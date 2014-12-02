@@ -31,6 +31,7 @@ class Collection(object):
         if response.status_code == 409:
             response = self.__invoke_collection_api('update')
             if response.status_code == 200:
+                self.data.id = response.json()['data']['collectionId']
                 return self
         raise ApiException(response.status_code)
 
