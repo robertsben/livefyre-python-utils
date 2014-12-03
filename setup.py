@@ -14,12 +14,10 @@ except ImportError:
     from distutils.command.build_py import build_py
 
 try:
-    readme = open('README.md').read()
+    readme = open('README.rst').read()
 except IOError:
     readme = ''
     
-version = open('VERSION').read()
-
 install_requires = ['PyJWT == 0.2.1', 'requests == 2.4.1', 'python-dateutil == 2.2']
 
 if pyver < 2.7:
@@ -31,7 +29,7 @@ if pyver < 3.4:
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version=version,
+    version='2.0.1',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
