@@ -10,7 +10,7 @@ class DomainTestCase(LfTest, unittest.TestCase):
         super(DomainTestCase, self).setUp()
         self.network = Livefyre.get_network(self.NETWORK_NAME, self.NETWORK_KEY)
         self.site = self.network.get_site(self.SITE_ID, self.SITE_KEY)
-        self.collection = self.site.build_livecomments_collection('TITLE', self.ARTICLE_ID, self.URL)
+        self.collection = self.site.build_comments_collection('TITLE', self.ARTICLE_ID, self.URL)
     
     def test_quill(self):
         quill_domain_ssl = 'https://{0}.quill.fyre.co'.format(self.network.network_name)

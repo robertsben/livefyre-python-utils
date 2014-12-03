@@ -44,12 +44,12 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         
     def test_urn(self):
         name = 'PythonCreateCollection' + str(datetime.datetime.now())
-        collection = self.site.build_livecomments_collection(name, name, self.URL)
+        collection = self.site.build_comments_collection(name, name, self.URL)
         collection.data.id = '100'
         self.assertEquals(self.site.urn+':collection=100', collection.urn)
         
     def test_network_issued_fail(self):
-        collection = self.site.build_livecomments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
+        collection = self.site.build_comments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         collection.data.topics = ['fjaowiefj']
 
         if pyver < 2.7:
@@ -64,7 +64,7 @@ class CollectionTestCase(LfTest, unittest.TestCase):
     def test_create_update_collection(self):
         name = 'PythonCreateCollection' + str(datetime.datetime.now())
         
-        collection = self.site.build_livecomments_collection(name, name, self.URL).create_or_update()
+        collection = self.site.build_comments_collection(name, name, self.URL).create_or_update()
         other_id = collection.get_collection_content()['collectionSettings']['collectionId']
         self.assertEqual(collection.data.id, other_id)
         
@@ -86,12 +86,12 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         self.assertTrue(token)
         self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'reviews')
         
-        collection = self.site.build_liveblog_collection('title', 'articleId', 'https://livefyre.com')
+        collection = self.site.build_blog_collection('title', 'articleId', 'https://livefyre.com')
         token = collection.build_collection_meta_token()
         self.assertEqual(jwt.decode(token, self.SITE_KEY)['type'], 'liveblog')
         
         topics = [Topic.create(self.network, '1', '1')]
-        collection = self.site.build_livecomments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
+        collection = self.site.build_comments_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         collection.data.topics = topics
         self.assertTrue(collection.is_network_issued())
         
@@ -110,7 +110,7 @@ class CollectionTestCase(LfTest, unittest.TestCase):
         self.assertEqual(self.network.urn, decoded_token['iss'])
     
     def test_build_checksum(self):
-        collection = self.site.build_livecomments_collection('title', 'articleId', 'http://livefyre.com')
+        collection = self.site.build_comments_collection('title', 'articleId', 'http://livefyre.com')
         collection.data.tags = 'tags'
 
         checksum = collection.build_checksum()

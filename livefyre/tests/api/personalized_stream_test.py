@@ -57,7 +57,7 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.network, topic_dict)
         collection_name = 'PYTHON PSSTREAM TEST ' + str(datetime.datetime.now())
-        collection = self.site.build_livecomments_collection(collection_name, collection_name, self.URL).create_or_update()
+        collection = self.site.build_comments_collection(collection_name, collection_name, self.URL).create_or_update()
         
         topic_ids = PersonalizedStream.get_collection_topics(collection)
         self.assertFalse(topic_ids)
@@ -75,7 +75,7 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         self.assertFalse(collection_topics)
         
         collection_name = 'PYTHON PSSTREAM TEST ' + str(datetime.datetime.now())
-        collection = self.site.build_livecomments_collection(collection_name, collection_name, self.URL)
+        collection = self.site.build_comments_collection(collection_name, collection_name, self.URL)
         collection.data.topics = topics
         collection.create_or_update()
             
@@ -85,7 +85,7 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         topic_dict = {'1': 'UN', '2': 'DEUX'}
         topics = PersonalizedStream.create_or_update_topics(self.site, topic_dict)
         collection_name = 'PYTHON PSSTREAM TEST ' + str(datetime.datetime.now())
-        collection = self.site.build_livecomments_collection(collection_name, collection_name, self.URL).create_or_update()
+        collection = self.site.build_comments_collection(collection_name, collection_name, self.URL).create_or_update()
         
         topic_ids = PersonalizedStream.get_collection_topics(collection)
         self.assertFalse(topic_ids)
@@ -103,7 +103,7 @@ class PersonalizedStreamsTestCase(LfTest, unittest.TestCase):
         self.assertFalse(collection_topics)
         
         collection_name = 'PYTHON PSSTREAM TEST ' + str(datetime.datetime.now())
-        collection = self.site.build_livecomments_collection(collection_name, collection_name, self.URL)
+        collection = self.site.build_comments_collection(collection_name, collection_name, self.URL)
         collection.data.topics = topics
         collection.create_or_update()
             

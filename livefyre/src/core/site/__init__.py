@@ -13,13 +13,13 @@ class Site(object):
         data = SiteData(site_id, key)
         return Site(network, SiteValidator().validate(data))
     
-    def build_livecomments_collection(self, title, article_id, url):
+    def build_comments_collection(self, title, article_id, url):
         return self.build_collection(CollectionType.COMMENTS, title, article_id, url)
     
-    def build_liveblog_collection(self, title, article_id, url):
+    def build_blog_collection(self, title, article_id, url):
         return self.build_collection(CollectionType.BLOG, title, article_id, url)
         
-    def build_livechat_collection(self, title, article_id, url):
+    def build_chat_collection(self, title, article_id, url):
         return self.build_collection(CollectionType.CHAT, title, article_id, url)
     
     def build_counting_collection(self, title, article_id, url):
