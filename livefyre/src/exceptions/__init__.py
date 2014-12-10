@@ -28,6 +28,6 @@ class ApiStatus(Enum):
     @staticmethod
     def by_code(code):
         for status in ApiStatus.__members__.values():
-            if int(code) is status.code:
+            if int(code) == status.code:
                 return status
         raise ValueError('Error code {} has not been accounted for! Please contact us at tools@livefyre.com with this message.'.format(code))
