@@ -78,7 +78,7 @@ class SiteTestCase(LfTest, unittest.TestCase):
         self.assertTrue(collection)
         self.assertEquals(collection.data.type, CollectionType.REVIEWS)
         
-        collection = site.build_sitenotes_collection(self.TITLE, self.ARTICLE_ID, self.URL)
+        collection = site.build_sidenotes_collection(self.TITLE, self.ARTICLE_ID, self.URL)
         self.assertTrue(collection)
         self.assertEquals(collection.data.type, CollectionType.SIDENOTES)
         

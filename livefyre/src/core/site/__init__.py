@@ -31,7 +31,7 @@ class Site(object):
     def build_reviews_collection(self, title, article_id, url):
         return self.build_collection(CollectionType.REVIEWS, title, article_id, url)
     
-    def build_sitenotes_collection(self, title, article_id, url):
+    def build_sidenotes_collection(self, title, article_id, url):
         return self.build_collection(CollectionType.SIDENOTES, title, article_id, url)
     
     def build_collection(self, ctype, title, article_id, url):

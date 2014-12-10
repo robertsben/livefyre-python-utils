@@ -1,3 +1,7 @@
+=== 2.0.2 2014-12-10
+
+* Fixed typo - create_sitenotes_collection() to create_sidenotes_collection()
+
 === 2.0.1 2014-12-01
 
 * Updated Collection.create_or_update() to update id if updating.
