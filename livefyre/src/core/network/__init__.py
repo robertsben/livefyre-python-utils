@@ -8,6 +8,8 @@ from .model import NetworkData
 from .validator import NetworkValidator
 
 
+ALPHA_DASH_UNDER_DOT_REGEX = r'^[a-zA-Z0-9_\.-]+$'
+
 class Network(object):
     DEFAULT_USER = 'system'
     DEFAULT_EXPIRES = 86400
@@ -25,7 +27,7 @@ class Network(object):
         assert '{id}' in url_template, 'url_template should have {id}.'
         
         url = Domain.quill(self)+'/'
-        data = {'actor_token' : self.build_livefyre_token(), 'pull_profile_url' : url_template}
+        data = {'actor_token': self.build_livefyre_token(), 'pull_profile_url' : url_template}
         headers = {'Content-type': 'application/json'}
         
         response = requests.post(url=url, data=data, headers=headers)
@@ -34,7 +36,7 @@ class Network(object):
         
     def sync_user(self, user_id):
         url = '{0}/api/v3_0/user/{1}/refresh'.format(Domain.quill(self), user_id)
-        data = {'lftoken' : self.build_livefyre_token()}
+        data = {'lftoken': self.build_livefyre_token()}
         headers = {'Content-type': 'application/json'}
         
         response = requests.post(url=url, data=data, headers=headers)
@@ -46,7 +48,7 @@ class Network(object):
         return self.build_user_auth_token(self.DEFAULT_USER, self.DEFAULT_USER, self.DEFAULT_EXPIRES)
     
     def build_user_auth_token(self, user_id, display_name, expires):
-        assert re.match(r'^[a-zA-Z0-9_\.-]+$', user_id) is not None, 'user_id should only contain alphanumeric characters'
+        assert re.match(ALPHA_DASH_UNDER_DOT_REGEX, user_id) is not None, 'userId is not alphanumeric. Ensure the following regex pattern is respected {}'.format(ALPHA_DASH_UNDER_DOT_REGEX)
         
         if pyver < 3.0:
             assert isinstance(expires, (int, long, float, complex)), 'expires should be a number'

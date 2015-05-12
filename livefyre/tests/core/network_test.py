@@ -60,13 +60,13 @@ class NetworkTestCase(LfTest, unittest.TestCase):
         if pyver < 2.7:
             pass
         elif pyver < 3.0:
-            with self.assertRaisesRegexp(AssertionError, 'user_id should only contain alphanumeric characters'):
+            with self.assertRaisesRegexp(AssertionError, 'userId is not alphanumeric\. Ensure the following regex pattern is respected \^\[a\-zA\-Z0\-9\_\\\.\-\]\+\$'):
                 network.build_user_auth_token('system@blah', 'testName', 86400.0)
             with self.assertRaisesRegexp(AssertionError, 'expires should be a number'):
                 network.build_user_auth_token('blah', 'blah', '100')
             
         else:
-            with self.assertRaisesRegex(AssertionError, 'user_id should only contain alphanumeric characters'):
+            with self.assertRaisesRegex(AssertionError, 'userId is not alphanumeric\. Ensure the following regex pattern is respected \^\[a\-zA\-Z0\-9\_\\\.\-\]\+\$'):
                 network.build_user_auth_token('system@blah', 'testName', 86400.0)
             with self.assertRaisesRegex(AssertionError, 'expires should be a number'):
                 network.build_user_auth_token('blah', 'blah', '100')

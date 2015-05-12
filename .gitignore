@@ -10,3 +10,5 @@ test.properties
 test.ini
 .settings/org.eclipse.core.resources.prefs
 .coverage
+.iml
+.idea

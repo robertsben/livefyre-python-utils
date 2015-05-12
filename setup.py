@@ -18,18 +18,18 @@ try:
 except IOError:
     readme = ''
     
-install_requires = ['PyJWT == 0.2.1', 'requests >= 2.2.1', 'python-dateutil == 2.2']
+install_requires = ['PyJWT >= 1.0.1', 'requests >= 2.2.1', 'python-dateutil >= 2.2']
 
 if pyver < 2.7:
-    install_requires.append('ordereddict == 1.1')
+    install_requires.append('ordereddict >= 1.1')
     
 if pyver < 3.4:
-    install_requires.append('enum34 == 1.0')
+    install_requires.append('enum34 >= 1.0')
 
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='2.0.2',
+    version='2.0.3',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
