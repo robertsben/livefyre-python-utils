@@ -13,7 +13,7 @@ class CollectionData(object):
         self.article_id = article_id
         self.title = title
         self.url = url
-        self.id = 'Call create_or_update() on the collection to set the id.'
+        self.id = 'Id not set. Call createOrUpdate() on the collection to set the id, or manually set it on this object.'
         
     def as_map(self):
         attr = self.__dict__.copy()
