@@ -29,7 +29,7 @@ if pyver < 3.4:
 setup(
     name='livefyre',
     cmdclass={'build_py': build_py},
-    version='2.0.3',
+    version='2.0.4',
     description='Livefyre Python utility classes',
     long_description=readme,
     license='MIT',
@@ -40,7 +40,6 @@ setup(
     packages=find_packages(),
     install_requires=install_requires,
     test_suite='livefyre.tests',
-    use_2to3=True,
     zip_safe=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
